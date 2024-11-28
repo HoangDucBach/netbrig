@@ -94,6 +94,8 @@ NetBrig uses **Request Network** to automate the creation of invoices for schola
 
 ## Architecture Diagram
 
+![alt text](image.png)
+
 ## Requirement Analysis
 
 **1. Ease of Use**
