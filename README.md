@@ -1,8 +1,12 @@
-# NetBrig - Scholarship Platform for Students
+<p align="center">
+  <img src="image.png" alt="alt text">
+</p>
+
+<h1 align="center">Scholarship Platform for Students</h1>
 
 ## Table of Contents
 
-- [NetBrig - Scholarship Platform for Students](#netbrig---scholarship-platform-for-students)
+- [PayChunk- Scholarship Platform for Students](#netbrig---scholarship-platform-for-students)
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
     - [Why Request Network?](#why-request-network)
@@ -14,7 +18,7 @@
     - [Difficulty in Discovering Relevant Scholarships](#difficulty-in-discovering-relevant-scholarships)
     - [Geographical and Currency Barriers](#geographical-and-currency-barriers)
     - [Lack of Automation in Payment and Disbursement](#lack-of-automation-in-payment-and-disbursement)
-  - [NetBrig Solution](#netbrig-solution)
+  - [PayChunkSolution](#netbrig-solution)
   - [Architecture Diagram](#architecture-diagram)
   - [Requirement Analysis](#requirement-analysis)
 
@@ -24,32 +28,29 @@
 
 ### Why Request Network?
 
-NetBrig utilizes Request Network as a core component to enhance the payment and disbursement processes for scholarships. Here’s why Request Network is the ideal choice:
+PayChunkutilizes Request Network as a core component to enhance the payment and disbursement processes for scholarships. Here’s why Request Network is the ideal choice:
 
 **1. Transparency:**  
 Request Network ensures that every financial transaction, including scholarship disbursements, is visible on the blockchain. This enhances trust between students, universities, and companies.
 
 **2. Automation with Smart Contracts:**  
-By integrating Request Network, NetBrig automates the creation and processing of payment requests. Once a scholarship is awarded, the payment request triggers the issuance of the NFT and transfers the funds seamlessly to the recipient.
+By integrating Request Network, PayChunkautomates the creation and processing of payment requests. Once a scholarship is awarded, the payment request triggers the issuance of the NFT and transfers the funds seamlessly to the recipient.
 
 **3. Cost-Effectiveness:**  
 Request Network reduces transaction costs compared to traditional payment systems by leveraging blockchain technology, making it a financially efficient solution for managing multiple scholarships.
 
 **4. Global Reach:**  
-The decentralized nature of Request Network enables cross-border payments without the need for intermediaries, making NetBrig accessible to students, universities, and companies worldwide.
+The decentralized nature of Request Network enables cross-border payments without the need for intermediaries, making PayChunkaccessible to students, universities, and companies worldwide.
 
 **5. Compliance and Security:**  
-Request Network supports compliance with international standards for payments, ensuring that all financial operations on NetBrig are secure and adhere to legal regulations.
-
-**6. Simplicity:**
-Request Network simplifies blockchain interactions via APIs, removing the need for managing contracts, libraries, or gas.
+Request Network supports compliance with international standards for payments,
 
 **7. Privacy:**
 Request Network ensures GDPR-compliant privacy, encrypting request data accessible only to involved parties on the blockchain.
 
 ### Product Goal
 
-NetBrig aims to build a decentralized platform that connects students with scholarship opportunities from universities and companies. By leveraging blockchain technology and NFTs, we streamline the application process. Additionally, we use Request Network’s transparent payment protocol to automate the creation and disbursement of scholarships. The platform empowers talented students with easy access to financial aid and additional learning resources, while allowing universities and companies to distribute scholarships efficiently and measure their impact.
+PayChunkaims to build a decentralized platform that connects students with scholarship opportunities from universities and companies. By leveraging blockchain technology and NFTs, we streamline the application process. Additionally, we use Request Network’s transparent payment protocol to automate the creation and disbursement of scholarships. The platform empowers talented students with easy access to financial aid and additional learning resources, while allowing universities and companies to distribute scholarships efficiently and measure their impact.
 
 ## User Stories
 
@@ -79,18 +80,18 @@ International scholarships face challenges like high transaction fees, slow paym
 
 Manual scholarship payment and disbursement processes are time-consuming, error-prone, and inefficient, delaying funds and adding administrative burden to universities and companies.
 
-## NetBrig Solution
+## PayChunkSolution
 
-NetBrig addresses the challenges of the scholarship process by leveraging blockchain technologies along with Request Network’s efficient payment technology, ensuring a seamless and transparent experience for all users. Here’s how NetBrig addresses the identified issues:
+PayChunkaddresses the challenges of the scholarship process by leveraging blockchain technologies along with Request Network’s efficient payment technology, ensuring a seamless and transparent experience for all users. Here’s how PayChunkaddresses the identified issues:
 
 **1. EIP-6551 for Scholarships and Learning Resources**
-By utilizing **EIP-6551**, NetBrig links scholarships with educational materials via NFTs. These NFTs serve as both a proof of scholarship and a gateway to additional resources, such as learning materials, courses, or mentorship, enhancing the value students receive.
+By utilizing **EIP-6551**, PayChunklinks scholarships with educational materials via NFTs. These NFTs serve as both a proof of scholarship and a gateway to additional resources, such as learning materials, courses, or mentorship, enhancing the value students receive.
 
 **2. ERC-4337 for Easy Web3 Access**
-To simplify Web3 access, NetBrig integrates **ERC-4337,** making it easier for students to engage with the platform using smart accounts. This allows students to interact with Web3 features without the need for a cryptocurrency wallet, lowering the entry barrier and increasing accessibility.
+To simplify Web3 access, PayChunkintegrates **ERC-4337,** making it easier for students to engage with the platform using smart accounts. This allows students to interact with Web3 features without the need for a cryptocurrency wallet, lowering the entry barrier and increasing accessibility.
 
 **3. Request Network for Automatic Billing and Tracking**
-NetBrig uses **Request Network** to automate the creation of invoices for scholarship disbursements and track payments on the blockchain. This ensures transparency, reduces manual processes, and allows universities and companies to monitor the scholarship flow in real-time, providing a seamless experience for all parties involved.
+PayChunkuses **Request Network** to automate the creation of invoices for scholarship disbursements and track payments on the blockchain. This ensures transparency, reduces manual processes, and allows universities and companies to monitor the scholarship flow in real-time, providing a seamless experience for all parties involved.
 
 ## Architecture Diagram
 
