@@ -1,34 +1,35 @@
 <p align="center">
-  <img src="image.png" alt="alt text">
+  <img src="image.png" alt="alt text" height=64>
+</p>
+<p align="center">
+<b>
+Scholarship Platform for Students
+</b>
 </p>
 
-<h1 align="center">Scholarship Platform for Students</h1>
+## 📋 Table of Contents
 
-## Table of Contents
+- [📋 Table of Contents](#-table-of-contents)
+- [🌟 Introduction](#-introduction)
+  - [Why Request Network?](#why-request-network)
+  - [🎯 Product Goal](#-product-goal)
+- [👥 User Stories](#-user-stories)
+- [❗ Problem Statement](#-problem-statement)
+  - [Rigid Payment Structures](#rigid-payment-structures)
+  - [Limited Flexibility for Shared Payments](#limited-flexibility-for-shared-payments)
+  - [Lack of Real-Time Price Adjustments](#lack-of-real-time-price-adjustments)
+  - [Inefficiencies in Invoice Management](#inefficiencies-in-invoice-management)
+- [💡 PayChunk Solution](#-paychunk-solution)
+- [🛠️ Architecture Diagram](#️-architecture-diagram)
+- [📋 Requirement Analysis](#-requirement-analysis)
 
-- [PayChunk- Scholarship Platform for Students](#netbrig---scholarship-platform-for-students)
-  - [Table of Contents](#table-of-contents)
-  - [Introduction](#introduction)
-    - [Why Request Network?](#why-request-network)
-    - [Product Goal](#product-goal)
-  - [User Stories](#user-stories)
-  - [Problem Statement](#problem-statement)
-    - [Complex and Time-Consuming Application Processes](#complex-and-time-consuming-application-processes)
-    - [Lack of Transparency in Scholarship Distribution](#lack-of-transparency-in-scholarship-distribution)
-    - [Difficulty in Discovering Relevant Scholarships](#difficulty-in-discovering-relevant-scholarships)
-    - [Geographical and Currency Barriers](#geographical-and-currency-barriers)
-    - [Lack of Automation in Payment and Disbursement](#lack-of-automation-in-payment-and-disbursement)
-  - [PayChunkSolution](#netbrig-solution)
-  - [Architecture Diagram](#architecture-diagram)
-  - [Requirement Analysis](#requirement-analysis)
+## 🌟 Introduction
 
-## Introduction
-
-**NetBrig** is a decentralized platform designed to help students access scholarship opportunities from universities and companies. By leveraging cutting-edge technology, we aim to streamline the scholarship application and disbursement process, making it easier for students to receive financial support and for institutions to track and distribute scholarships efficiently.
+**PayChunk** is a revolutionary platform for dynamic invoicing, allowing businesses and individuals to seamlessly create, manage and split invoices. Powered by blockchain technology, NFTs and seamlessly integrated with Request Network, Pay Chunk offers unparalleled flexibility in payment management, enabling automated price adjustments, shared payments and transparent tracking.
 
 ### Why Request Network?
 
-PayChunkutilizes Request Network as a core component to enhance the payment and disbursement processes for scholarships. Here’s why Request Network is the ideal choice:
+PayChunk utilizes Request Network as a core component to enhance the payment and disbursement processes for scholarships. Here’s why Request Network is the ideal choice:
 
 **1. Transparency:**  
 Request Network ensures that every financial transaction, including scholarship disbursements, is visible on the blockchain. This enhances trust between students, universities, and companies.
@@ -48,75 +49,78 @@ Request Network supports compliance with international standards for payments,
 **7. Privacy:**
 Request Network ensures GDPR-compliant privacy, encrypting request data accessible only to involved parties on the blockchain.
 
-### Product Goal
+### 🎯 Product Goal
 
-PayChunkaims to build a decentralized platform that connects students with scholarship opportunities from universities and companies. By leveraging blockchain technology and NFTs, we streamline the application process. Additionally, we use Request Network’s transparent payment protocol to automate the creation and disbursement of scholarships. The platform empowers talented students with easy access to financial aid and additional learning resources, while allowing universities and companies to distribute scholarships efficiently and measure their impact.
+Pay Chunk aims to redefine invoice management by integrating dynamic pricing, split and share invoices for flexible and transparent payments in the form of NFTs. By leveraging the Request Network, Pay Chunk empowers businesses and individuals to adapt their finances to modern needs.
 
-## User Stories
+## 👥 User Stories
 
-- **As a university**, I want to easily create and manage scholarship programs on the platform, including setting eligibility criteria, deadlines, and award amounts, and have easy access to talented students.
-- **As a company**, I want to establish corporate scholarship programs to attract and retain top talent.
-- **As a student**, I want to easily discover and apply for suitable scholarship opportunities through simple procedures.
+- **As a business owner (or payee)**, As a business owner (or payee), I want to issue invoices that automatically adjust to fluctuating market prices or variable consumption levels.
+- **As a payer**, As a payer, I want to split invoice payments among contributors dynamically, ensuring fair cost distribution.
 
-## Problem Statement
+## ❗ Problem Statement
 
-### Complex and Time-Consuming Application Processes
+### Rigid Payment Structures
 
-Scholarship application procedures are often lengthy and complicated, requiring students to submit excessive paperwork and navigate multiple steps, leading to frustration and fewer applicants.
+Rigid payment structures that do not support flexible changes because invoices are fixed.
 
-### Lack of Transparency in Scholarship Distribution
+### Limited Flexibility for Shared Payments
 
-The scholarship disbursement process lacks clear tracking, making it difficult for students, universities, and companies to ensure fairness, accuracy, and accountability.
+Current solutions do not support seamless splitting of invoices among multiple contributors, creating logistical challenges.
 
-### Difficulty in Discovering Relevant Scholarships
+### Lack of Real-Time Price Adjustments
 
-Students face challenges in identifying suitable scholarships due to a lack of centralized information and personalized matching based on their qualifications, interests, and needs.
+Invoices are static and fail to reflect real-time price shifts due to market fluctuations or negotiated discounts, causing inefficiencies.
 
-### Geographical and Currency Barriers
+### Inefficiencies in Invoice Management
 
-International scholarships face challenges like high transaction fees, slow payment processing, and issues with currency conversion, limiting access to global opportunities for students.
+Manual invoice processing is error-prone, time-consuming, and lacks transparency, hindering effective payment tracking and reconciliation.
 
-### Lack of Automation in Payment and Disbursement
+## 💡 PayChunk Solution
 
-Manual scholarship payment and disbursement processes are time-consuming, error-prone, and inefficient, delaying funds and adding administrative burden to universities and companies.
+PayChunk solves the invoicing pain points and challenges by leveraging blockchain technology along with Request Network’s efficient payment technology, ensuring a seamless and transparent experience for all users. Here’s how PayChunk solves the identified problems:
 
-## PayChunkSolution
+**1. Dynamic Invoices**
+Create invoices that automatically adjust prices based on predefined criteria such as market rates, service consumption, or milestones.
 
-PayChunkaddresses the challenges of the scholarship process by leveraging blockchain technologies along with Request Network’s efficient payment technology, ensuring a seamless and transparent experience for all users. Here’s how PayChunkaddresses the identified issues:
+**2. Invoice Payment Sharing Protocol**
+Allow payers to split invoices into multiple separate sub-invoices connected to the main invoice, allowing for shared invoice payments between members. Increases granular tracking and streamlined financial allocation.
 
-**1. EIP-6551 for Scholarships and Learning Resources**
-By utilizing **EIP-6551**, PayChunklinks scholarships with educational materials via NFTs. These NFTs serve as both a proof of scholarship and a gateway to additional resources, such as learning materials, courses, or mentorship, enhancing the value students receive.
+**3. NFT-backed Invoices**
+Each invoice is represented as an NFT, allowing for traceability and support for sharing protocols, ownership verification, and additional integrations such as collateral or risk assessment.
 
-**2. ERC-4337 for Easy Web3 Access**
-To simplify Web3 access, PayChunkintegrates **ERC-4337,** making it easier for students to engage with the platform using smart accounts. This allows students to interact with Web3 features without the need for a cryptocurrency wallet, lowering the entry barrier and increasing accessibility.
+**4. Real-time tracking and updates**
+Provide real-time insights into payment progress, status updates, and any changes made to invoices.
 
-**3. Request Network for Automatic Billing and Tracking**
-PayChunkuses **Request Network** to automate the creation of invoices for scholarship disbursements and track payments on the blockchain. This ensures transparency, reduces manual processes, and allows universities and companies to monitor the scholarship flow in real-time, providing a seamless experience for all parties involved.
+**5. Smart Contracts for Automation**
+Smart contracts automatically trigger payments, ensuring funds are released upon completion of milestones or pre-defined conditions.
 
-## Architecture Diagram
+## 🛠️ Architecture Diagram
 
-## Requirement Analysis
+![**alt text**](image-2.png)
 
-**1. Ease of Use**
-The platform must be intuitive, enabling users (students, universities, companies) to easily navigate and manage scholarship processes.
+## 📋 Requirement Analysis
 
-**2. Blockchain Integration**
-Utilize EIP6551 for NFT-based scholarships and Request Network for transparent payment automation, ensuring secure, efficient transactions.
+**1. Dynamic Pricing and Adjustments**
+Invoices must allow real-time price updates based on agreed conditions, such as market rates or service levels.
 
-**3. Global Access & Scalability**
-Support for cross-border scholarship programs, multi-currency payments, and global accessibility to cater to international students and institutions.
+**2. Payment Splitting and Contribution Tracking**
+Enable splitting payments among multiple contributors while ensuring that the final destination aligns with the original invoice.
 
-**4. Automation & Smart Contracts**
-Automate scholarship issuance, application processes, and payment disbursements through smart contracts to minimize manual effort.
+**3. Blockchain Transparency**
+Leverage blockchain technology to provide a secure, transparent, and immutable record of invoices and payments.
 
-**5. Transparency & Security**
-Ensure transparency in scholarship distribution and secure data handling by leveraging blockchain and encryption technologies.
+**4. Automation via Smart Contracts**
+Utilize smart contracts for automated payment triggers based on milestones or completion of conditions.
 
-**6. Customization & Flexibility**
-Allow universities and companies to customize scholarship programs with criteria, deadlines, and award amounts.
+**5. Ease of Use**
+Develop an intuitive user interface for creating, managing, and tracking invoices and payments.
 
-**7. Integration of Learning Materials**
-Incorporate relevant learning resources, such as online courses or study materials, along with the scholarship, enhancing students' educational experience.
+**6. Scalability and Global Reach**
+Support payments in multiple currencies and tokens, ensuring accessibility for users worldwide.
 
-**8. Real-Time Tracking**
-Provide real-time updates for scholarship status, application progress, and payment transactions.
+**7. NFT Integration**
+Utilize NFTs to represent invoices, enabling ownership verification and potential collateralization or integration with other financial services.
+
+**8. Compliance and Securit**y
+Ensure all operations are GDPR-compliant and prioritize user data security with encryption and privacy measures.
