@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="image.png" alt="alt text" height=64>
+  <img src="logo.png" alt="logo" height=64>
 </p>
 <p align="center">
 <b>
@@ -97,7 +97,7 @@ Smart contracts automatically trigger payments, ensuring funds are released upon
 
 ## 🛠️ Architecture Diagram
 
-![**alt text**](image-2.png)
+![**architecture**](architecture.png)
 
 ## 📋 Requirement Analysis
 
