@@ -97,7 +97,7 @@ Smart contracts automatically trigger payments, ensuring funds are released upon
 
 ## 🛠️ Architecture Diagram
 
-![**alt text**](image-2.png)
+![**architecture**](architecture.png)
 
 ## 📋 Requirement Analysis
 
