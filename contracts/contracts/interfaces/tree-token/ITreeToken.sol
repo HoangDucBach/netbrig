@@ -5,7 +5,10 @@ import "./ITreeTokenState.sol";
 import "./ITreeTokenActions.sol";
 import "./ITreeTokenEvents.sol";
 
-/// @title ITreeToken - Interface for Tree Token
+/**
+ * @title ITreeToken - Interface for Tree Token
+ * @notice Interface for contract tokens with Tree structure
+ */
 interface ITreeToken is ITreeTokenState, ITreeTokenActions, ITreeTokenEvents {
 
 }
