@@ -7,4 +7,7 @@ pragma solidity ^0.8.27;
 interface IDynamicInvoiceTokenImmutables {
     /// @notice The contract of factory that deployed the token
     function factory() external view returns (address);
+
+    /// @notice The contract of EthereumProxy (Request Network)
+    function ethereumProxy() external view returns (address);
 }

@@ -3,6 +3,7 @@ pragma solidity ^0.8.27;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "./request-network/interfaces/IEthereumProxy.sol";
 
 import "./interfaces/dynamic-invoice-token/IDynamicInvoiceToken.sol";
 import "./interfaces/IDynamicInvoiceTokenDeployer.sol";
@@ -34,7 +35,7 @@ contract DynamicInvoiceToken is IDynamicInvoiceToken, ERC721, AccessControl {
     bytes32 public constant PAYEE_ROLE = keccak256("PAYEE_ROLE");
 
     /// @inheritdoc IDynamicInvoiceTokenState
-    string public override requestId;
+    bytes public override paymentReference;
 
     /// @inheritdoc IDynamicInvoiceTokenState
     address public override payer;
@@ -43,13 +44,22 @@ contract DynamicInvoiceToken is IDynamicInvoiceToken, ERC721, AccessControl {
     address public override payee;
 
     /// @inheritdoc IDynamicInvoiceTokenState
-    uint8 public override status;
+    uint256 public override amount;
+
+    /// @dev Status of the invoice
+    uint8 private _status;
+
+    /// @dev Progress of the invoice
+    uint8 private _progress;
 
     /// @dev All child of the dynamic invoice token
     address[] private _children;
 
     /// @inheritdoc IDynamicInvoiceTokenImmutables
     address public override factory;
+
+    /// @inheritdoc IDynamicInvoiceTokenImmutables
+    address public override ethereumProxy;
 
     /// @inheritdoc ERC165
     function supportsInterface(
@@ -61,11 +71,13 @@ contract DynamicInvoiceToken is IDynamicInvoiceToken, ERC721, AccessControl {
     constructor(string memory name, string memory symbol) ERC721(name, symbol) {
         (
             factory,
+            ethereumProxy,
             name,
             symbol,
+            paymentReference,
             payer,
             payee,
-            requestId
+            amount
         ) = IDynamicInvoiceTokenDeployer(msg.sender).parameters();
 
         _grantRole(PAYER_ROLE, payer);
@@ -78,20 +90,52 @@ contract DynamicInvoiceToken is IDynamicInvoiceToken, ERC721, AccessControl {
         return _children;
     }
 
-    /// @inheritdoc IDynamicInvoiceTokenActions
-    function changeStatus(
-        uint8 _status
-    ) external override onlyRole(PAYEE_ROLE) {
-        require(
-            _status < uint8(InvoiceStatus.CANCELLED),
-            "DynamicInvoiceToken: Invalid status"
-        );
-        status = _status;
+    /// @inheritdoc IDynamicInvoiceTokenState
+    function status() external view override returns (uint8) {
+        if (_children.length == 0) {
+            return _status;
+        }
+
+        if (DynamicInvoiceToken(address(this)).progress() > 0) {
+            return uint8(InvoiceStatus.PARTIALLY_PAID);
+        }
+
+        if (DynamicInvoiceToken(address(this)).progress() == 100) {
+            return uint8(InvoiceStatus.PAID);
+        }
+
+        if (DynamicInvoiceToken(address(this)).progress() == 0) {
+            return uint8(InvoiceStatus.PENDING);
+        }
+
+        return uint8(InvoiceStatus.CANCELLED);
+    }
+
+    /// @inheritdoc IDynamicInvoiceTokenState
+    function progress() external view override returns (uint8) {
+        if (_children.length == 0) {
+            return _progress;
+        }
+
+        uint8 totalProgress = 0;
+        uint8 totalChildren = 0;
+
+        for (uint256 i = 0; i < _children.length; i++) {
+            if (
+                IDynamicInvoiceToken(_children[i]).status() ==
+                uint8(InvoiceStatus.PAID)
+            ) {
+                totalProgress += IDynamicInvoiceToken(_children[i]).progress();
+                totalChildren++;
+            }
+        }
+
+        return totalProgress / totalChildren;
     }
 
     /// @inheritdoc IDynamicInvoiceTokenActions
     function spawnChild(
-        string memory _requestId,
+        bytes calldata _paymentReference,
         address _payer
     ) external override onlyRole(PAYER_ROLE) returns (address) {
         require(_payer != address(0), "DynamicInvoiceToken: Invalid payer");
@@ -100,13 +144,47 @@ contract DynamicInvoiceToken is IDynamicInvoiceToken, ERC721, AccessControl {
             .createDynamicInvoiceToken(
                 name(),
                 symbol(),
+                _paymentReference,
                 _payer,
                 address(this),
-                _requestId
+                amount
             );
 
         _children.push(childAddress);
 
         return childAddress;
+    }
+
+    /// @inheritdoc IDynamicInvoiceTokenActions
+    function pay() external payable override onlyRole(PAYER_ROLE) {
+        if (_status == uint8(InvoiceStatus.PAID)) {
+            (bool refundSuccess, ) = msg.sender.call{value: msg.value}("");
+            require(refundSuccess, "DynamicInvoiceToken: Refund failed");
+            revert("DynamicInvoiceToken: Invoice already paid");
+        }
+
+        require(
+            _status == uint8(InvoiceStatus.PENDING),
+            "DynamicInvoiceToken: The invoice is not pending"
+        );
+
+        require(
+            msg.value == amount,
+            "DynamicInvoiceToken: The amount is not correct"
+        );
+
+        try
+            IEthereumProxy(payable(ethereumProxy)).transferWithReference{
+                value: amount
+            }(payable(payee), paymentReference)
+        {
+            _status = uint8(InvoiceStatus.PAID);
+        } catch {
+            revert("DynamicInvoiceToken: Payment failed");
+        }
+
+        _status = uint8(InvoiceStatus.PAID);
+
+        emit DynamicInvoiceTokenPaid(address(this));
     }
 }

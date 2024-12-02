@@ -6,13 +6,13 @@ pragma solidity ^0.8.27;
  */
 interface IDynamicInvoiceTokenActions {
     /// @notice Spawn a new child token
-    /// @param _requestId Request Id of child invoice
+    /// @param _paymentReference Payment reference of child invoice that be assigned
     /// @param _payer Payer of child invoice that be assigned
     function spawnChild(
-        string memory _requestId,
+        bytes calldata _paymentReference,
         address _payer
     ) external returns (address);
 
-    /// @notice Change status of the token
-    function changeStatus(uint8 __status) external;
+    /// @notice Pay the invoice
+    function pay() external payable;
 }

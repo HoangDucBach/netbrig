@@ -27,5 +27,7 @@ library ErrorLibrary {
     error NotWhitelisted(); /// @dev Error not whitelisted
     error NotBlacklisted(); /// @dev Error not blacklisted
 
+    error TransferFailed(); /// @dev Error transfer failed
+
     error InternalError(); /// @dev Error internal error after all checks
 }
