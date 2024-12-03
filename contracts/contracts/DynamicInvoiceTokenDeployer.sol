@@ -9,10 +9,11 @@ import "./DynamicInvoiceToken.sol";
  */
 contract DynamicInvoiceTokenDeployer is IDynamicInvoiceTokenDeployer {
     struct Parameters {
+        address registry;
         address factory;
-        address ethereumProxy;
         string name;
         string symbol;
+        string requestId;
         bytes paymentReference;
         address payer;
         address payee;
@@ -23,8 +24,8 @@ contract DynamicInvoiceTokenDeployer is IDynamicInvoiceTokenDeployer {
     Parameters public override parameters;
 
     /// @dev Deploy a dynamic invoice token
+    /// @param _registry The address of the registry
     /// @param _factory The address of the factory
-    /// @param _ethereumProxy The address of the EthereumProxy contract (Request Network)
     /// @param _name The name of the token
     /// @param _symbol The symbol of the token
     /// @param _paymentReference The payment reference of the invoice
@@ -32,10 +33,11 @@ contract DynamicInvoiceTokenDeployer is IDynamicInvoiceTokenDeployer {
     /// @param _payee The payee of the invoice
     /// @param _amount The amount of the invoice
     function deploy(
+        address _registry,
         address _factory,
-        address _ethereumProxy,
         string memory _name,
         string memory _symbol,
+        string memory _requestId,
         bytes memory _paymentReference,
         address _payer,
         address _payee,
@@ -43,10 +45,11 @@ contract DynamicInvoiceTokenDeployer is IDynamicInvoiceTokenDeployer {
         
     ) internal returns (address dynamicInvoiceToken) {
         parameters = Parameters({
+            registry: _registry,
             factory: _factory,
-            ethereumProxy: _ethereumProxy,
             name: _name,
             symbol: _symbol,
+            requestId: _requestId,
             paymentReference: _paymentReference,
             payer: _payer,
             payee: _payee,

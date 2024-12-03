@@ -26,6 +26,7 @@ interface IDynamicInvoiceTokenFactory {
     /// @notice This function creates a dynamic invoice token
     /// @param _name The name of the token
     /// @param _symbol The symbol of the token
+    /// @param _requestId The request ID of the invoice
     /// @param _paymentReference The payment reference of the invoice
     /// @param _payer The payer of the invoice
     /// @param _payee The payee of the invoice
@@ -34,6 +35,7 @@ interface IDynamicInvoiceTokenFactory {
     function createDynamicInvoiceToken(
         string memory _name,
         string memory _symbol,
+        string calldata _requestId,
         bytes calldata _paymentReference,
         address _payer,
         address _payee,

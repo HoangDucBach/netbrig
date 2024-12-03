@@ -5,6 +5,9 @@ pragma solidity ^0.8.27;
  * @title IDynamicInvoiceTokenState - Interface for Dynamic Invoice Token State
  */
 interface IDynamicInvoiceTokenState {
+    /// @notice Request ID of the invoice
+    function requestId() external view returns (string memory);
+
     /// @notice Reference to the request payment, for handle the payment (Request Network)
     function paymentReference() external view returns (bytes memory);
 

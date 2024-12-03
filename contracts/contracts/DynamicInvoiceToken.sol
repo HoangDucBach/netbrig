@@ -7,6 +7,7 @@ import "./request-network/interfaces/IEthereumProxy.sol";
 
 import "./interfaces/dynamic-invoice-token/IDynamicInvoiceToken.sol";
 import "./interfaces/IDynamicInvoiceTokenDeployer.sol";
+import "./interfaces/IPayChunkRegistry.sol";
 
 import "./libraries/ErrorLibrary.sol";
 import "./DynamicInvoiceTokenFactory.sol";
@@ -35,6 +36,9 @@ contract DynamicInvoiceToken is IDynamicInvoiceToken, ERC721, AccessControl {
     bytes32 public constant PAYEE_ROLE = keccak256("PAYEE_ROLE");
 
     /// @inheritdoc IDynamicInvoiceTokenState
+    string public override requestId;
+
+    /// @inheritdoc IDynamicInvoiceTokenState
     bytes public override paymentReference;
 
     /// @inheritdoc IDynamicInvoiceTokenState
@@ -59,7 +63,7 @@ contract DynamicInvoiceToken is IDynamicInvoiceToken, ERC721, AccessControl {
     address public override factory;
 
     /// @inheritdoc IDynamicInvoiceTokenImmutables
-    address public override ethereumProxy;
+    address public override registry;
 
     /// @inheritdoc ERC165
     function supportsInterface(
@@ -68,12 +72,16 @@ contract DynamicInvoiceToken is IDynamicInvoiceToken, ERC721, AccessControl {
         return super.supportsInterface(interfaceId);
     }
 
+    /// @dev Receive function
+    receive() external payable {}
+
     constructor(string memory name, string memory symbol) ERC721(name, symbol) {
         (
+            registry,
             factory,
-            ethereumProxy,
             name,
             symbol,
+            requestId,
             paymentReference,
             payer,
             payee,
@@ -96,15 +104,15 @@ contract DynamicInvoiceToken is IDynamicInvoiceToken, ERC721, AccessControl {
             return _status;
         }
 
-        if (DynamicInvoiceToken(address(this)).progress() > 0) {
+        if (this.progress() > 0) {
             return uint8(InvoiceStatus.PARTIALLY_PAID);
         }
 
-        if (DynamicInvoiceToken(address(this)).progress() == 100) {
+        if (this.progress() == 100) {
             return uint8(InvoiceStatus.PAID);
         }
 
-        if (DynamicInvoiceToken(address(this)).progress() == 0) {
+        if (this.progress() == 0) {
             return uint8(InvoiceStatus.PENDING);
         }
 
@@ -118,25 +126,26 @@ contract DynamicInvoiceToken is IDynamicInvoiceToken, ERC721, AccessControl {
         }
 
         uint8 totalProgress = 0;
-        uint8 totalChildren = 0;
+        uint256 totalChildren = _children.length;
 
         for (uint256 i = 0; i < _children.length; i++) {
             if (
                 IDynamicInvoiceToken(_children[i]).status() ==
                 uint8(InvoiceStatus.PAID)
             ) {
-                totalProgress += IDynamicInvoiceToken(_children[i]).progress();
-                totalChildren++;
+                totalProgress++;
             }
         }
 
-        return totalProgress / totalChildren;
+        return uint8((totalProgress * 100) / totalChildren);
     }
 
     /// @inheritdoc IDynamicInvoiceTokenActions
     function spawnChild(
+        string calldata _requestId,
         bytes calldata _paymentReference,
-        address _payer
+        address _payer,
+        uint256 _amount
     ) external override onlyRole(PAYER_ROLE) returns (address) {
         require(_payer != address(0), "DynamicInvoiceToken: Invalid payer");
 
@@ -144,10 +153,11 @@ contract DynamicInvoiceToken is IDynamicInvoiceToken, ERC721, AccessControl {
             .createDynamicInvoiceToken(
                 name(),
                 symbol(),
+                _requestId,
                 _paymentReference,
                 _payer,
                 address(this),
-                amount
+                _amount
             );
 
         _children.push(childAddress);
@@ -169,22 +179,45 @@ contract DynamicInvoiceToken is IDynamicInvoiceToken, ERC721, AccessControl {
         );
 
         require(
-            msg.value == amount,
-            "DynamicInvoiceToken: The amount is not correct"
+            msg.value >= amount,
+            "DynamicInvoiceToken: The amount is not enough"
         );
 
+        address ethereumProxy = IPayChunkRegistry(registry).contracts(
+            "ETHEREUM_PROXY"
+        );
+        require(
+            isContract(ethereumProxy),
+            "DynamicInvoiceToken: ethereumProxy is not a contract"
+        );
+
+        /// @notice Transfer the amount to invoice before delegate call to EthereumProxy
+        // payable(address(this)).transfer(msg.value);
+
         try
-            IEthereumProxy(payable(ethereumProxy)).transferWithReference{
-                value: amount
-            }(payable(payee), paymentReference)
+            IEthereumProxy(ethereumProxy).transferWithReference{value: amount}(
+                payable(payee),
+                paymentReference
+            )
         {
             _status = uint8(InvoiceStatus.PAID);
+        } catch Error(string memory reason) {
+            revert(string(abi.encodePacked("DynamicInvoiceToken: ", reason)));
         } catch {
             revert("DynamicInvoiceToken: Payment failed");
         }
 
         _status = uint8(InvoiceStatus.PAID);
+        _progress = 100;
 
         emit DynamicInvoiceTokenPaid(address(this));
+    }
+
+    function isContract(address _addr) internal view returns (bool) {
+        uint32 size;
+        assembly {
+            size := extcodesize(_addr)
+        }
+        return (size > 0);
     }
 }

@@ -7,6 +7,7 @@ import "./interfaces/IDynamicInvoiceTokenFactory.sol";
 
 import "./DynamicInvoiceToken.sol";
 import "./DynamicInvoiceTokenDeployer.sol";
+import "./PayChunkRegistry.sol";
 
 /**
  * @title DynamicInvoiceTokenFactory
@@ -26,9 +27,14 @@ contract DynamicInvoiceTokenFactory is
     /// @inheritdoc IDynamicInvoiceTokenFactory
     mapping(bytes => address) public override getDynamicInvoiceToken;
 
-    constructor() {
+    /// @dev PayChunkRegistry contract
+    address public registry;
+
+    constructor(address _registry) {
         _grantRole(OWNER_ROLE, msg.sender);
+
         owner = msg.sender;
+        registry = _registry;
 
         emit OwnerChanged(address(0), msg.sender);
     }
@@ -37,6 +43,7 @@ contract DynamicInvoiceTokenFactory is
     function createDynamicInvoiceToken(
         string memory _name,
         string memory _symbol,
+        string calldata _requestId,
         bytes calldata _paymentReference,
         address _payer,
         address _payee,
@@ -53,10 +60,11 @@ contract DynamicInvoiceTokenFactory is
         );
 
         dynamicInvoiceToken = deploy(
-            address(this),
+            registry,
             address(this),
             _name,
             _symbol,
+            _requestId,
             _paymentReference,
             _payer,
             _payee,
