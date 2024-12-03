@@ -5,7 +5,7 @@ pragma solidity ^0.8.27;
  * @title IDynamicInvoiceTokenImmutables - Interface for Dynamic Invoice Token Immutables
  */
 interface IDynamicInvoiceTokenImmutables {
-    /// @notice The contract of registry
+    /// @notice Manage all contracts be able to interact
     function registry() external view returns (address);
 
     /// @notice The contract of factory that deployed the token

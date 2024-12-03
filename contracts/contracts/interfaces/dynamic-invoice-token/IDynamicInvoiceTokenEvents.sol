@@ -9,7 +9,18 @@ interface IDynamicInvoiceTokenEvents {
     /// @param invoice Address of the invoice
     event DynamicInvoiceTokenPaid(address indexed invoice);
 
+    /// @notice Event emitted when the invoice is canceled
+    /// @param invoice Address of the invoice
+    event DynamicInvoiceTokenCanceled(address indexed invoice);
+
     /// @notice Event emitted when the invoice is spawned
     /// @param invoice Address of the invoice
-    event DynamicInvoiceTokenSpawned(address indexed invoice);
+    /// @param childInvoice Address of the child invoice
+    event DynamicInvoiceTokenSpawned(address indexed invoice, address indexed childInvoice);
+
+    /// @notice Event emitted when the invoice update progresses
+    /// @param invoice Address of the invoice
+    /// @param progress Progress of the update
+    event DynamicInvoiceTokenUpdateProgress(address indexed invoice, uint8 progress);
+    
 }

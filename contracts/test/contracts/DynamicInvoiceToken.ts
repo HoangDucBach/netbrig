@@ -2,9 +2,6 @@ import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-
-import { DynamicInvoiceToken } from "../../typechain-types";
-
 describe("DynamicInvoiceToken", function () {
     async function setup() {
         const PayChunkRegistry = await ethers.getContractFactory("PayChunkRegistry");
@@ -63,7 +60,6 @@ describe("DynamicInvoiceToken", function () {
     it("Should have correct progress and status", async function () {
         const { token } = await loadFixture(setup);
 
-        expect(await token.progress()).to.equal(0);
         expect(await token.status()).to.equal(0);
     });
 
@@ -105,11 +101,10 @@ describe("DynamicInvoiceToken", function () {
 
             await tx.wait();
 
-            expect(await token.progress(), "Progress should be 100%").to.equal(100);
             expect(await token.status(), "Status should be PAID").to.equal(2);
         });
 
-        it("Should pay partially, status should be PARTIALLY_PAID and progress should be 50%", async function () {
+        it("Should pay partially, status should be PARTIALLY_PAID", async function () {
             const { payer, token, factory } = await loadFixture(setup);
 
             const invoiceChilds = [];
@@ -137,8 +132,8 @@ describe("DynamicInvoiceToken", function () {
             const amount = ethers.parseEther("0.5");
             const tx = await invoiceChild.connect(payer).pay({ value: amount });
             await tx.wait();
-// 
-            expect(await token.progress()).to.equal(25);
+            //          
+            expect(await token.amountPaid(), "Amount paid should be 0.5").to.equal(ethers.parseEther("0.5"));
             expect(await token.status(), "Status should be PARTIALLY_PAID").to.equal(1);
         });
     });

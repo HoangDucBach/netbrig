@@ -3,6 +3,7 @@ pragma solidity ^0.8.27;
 
 /**
  * @title IDynamicInvoiceTokenFactory
+ * @notice A contract that creates dynamic invoice tokens
  */
 interface IDynamicInvoiceTokenFactory {
     /// @notice This event is emitted when a dynamic invoice token is created
