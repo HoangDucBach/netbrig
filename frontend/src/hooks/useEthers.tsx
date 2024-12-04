@@ -38,16 +38,12 @@ export const clientToSigner = (client: Client<Transport, Chain, Account>): provi
     return new providers.JsonRpcProvider(transport.url, network).getSigner(account.address);
 }
 
-export const useEthers = ({ chainId }: { chainId?: number | undefined } = {}): EthersHook => {
+export const useEthers = ({ chainId }: { chainId?: number } = {}): EthersHook => {
     const client = useClient({ chainId });
     const { data: signerClient } = useConnectorClient({ chainId });
 
-    const provider = useMemo(() => client ? clientToProvider(client) : undefined, [client]);
+    const provider = useMemo(() => client && clientToProvider(client), [client]);
+    const signer = useMemo(() => signerClient && clientToSigner(signerClient), [signerClient]);
 
-    const signer = useMemo(() => signerClient ? clientToSigner(signerClient) : undefined, [signerClient]);
-
-    return {
-        provider,
-        signer,
-    };
+    return { provider, signer };
 };
