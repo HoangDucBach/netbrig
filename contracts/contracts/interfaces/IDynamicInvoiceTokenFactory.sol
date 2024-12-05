@@ -34,8 +34,8 @@ interface IDynamicInvoiceTokenFactory {
     /// @param _amount The amount of the invoice
     /// @return The address of the dynamic invoice token
     function createDynamicInvoiceToken(
-        string memory _name,
-        string memory _symbol,
+        string calldata _name,
+        string calldata _symbol,
         string calldata _requestId,
         bytes calldata _paymentReference,
         address _payer,

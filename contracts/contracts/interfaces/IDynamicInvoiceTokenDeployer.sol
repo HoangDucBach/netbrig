@@ -22,9 +22,9 @@ interface IDynamicInvoiceTokenDeployer {
         returns (
             address registry,
             address factory,
-            string memory name,
-            string memory symbol,
-            string memory requestId,
+            string calldata name,
+            string calldata symbol,
+            string calldata requestId,
             bytes calldata paymentReference,
             address payer,
             address payee,

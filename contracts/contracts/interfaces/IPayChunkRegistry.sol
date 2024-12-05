@@ -11,12 +11,12 @@ interface IPayChunkRegistry {
 
     /// @notice This event is emitted when a contract is registered
     function contracts(
-        string memory _contractName
+        string calldata _contractName
     ) external view returns (address);
 
     /// @notice Register a contract
     function registerContract(
-        string memory _contractName,
+        string calldata _contractName,
         address _contractAddress
     ) external;
 }

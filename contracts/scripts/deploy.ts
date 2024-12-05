@@ -1,4 +1,4 @@
-import { ethers } from "hardhat";
+import { ethers, run } from "hardhat";
 
 async function main() {
     try {
@@ -17,6 +17,16 @@ async function main() {
 
         console.log("DynamicInvoiceTokenFactory deployed to:", await dynamicInvoiceTokenFactory.getAddress());
         console.log("Transaction hash:", tx2?.hash);
+
+        console.log("Verify contracts...");
+        await run("verify:verify", {
+            address: payChunkRegistry.getAddress(),
+        });
+
+        await run("verify:verify", {
+            address: dynamicInvoiceTokenFactory.getAddress(),
+            constructorArguments: [payChunkRegistry.getAddress()],
+        });
     } catch (error) {
         console.error(error);
     }

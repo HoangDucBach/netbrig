@@ -41,8 +41,8 @@ contract DynamicInvoiceTokenFactory is
 
     /// @inheritdoc IDynamicInvoiceTokenFactory
     function createDynamicInvoiceToken(
-        string memory _name,
-        string memory _symbol,
+        string calldata _name,
+        string calldata _symbol,
         string calldata _requestId,
         bytes calldata _paymentReference,
         address _payer,

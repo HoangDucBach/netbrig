@@ -35,10 +35,10 @@ contract DynamicInvoiceTokenDeployer is IDynamicInvoiceTokenDeployer {
     function deploy(
         address _registry,
         address _factory,
-        string memory _name,
-        string memory _symbol,
-        string memory _requestId,
-        bytes memory _paymentReference,
+        string calldata _name,
+        string calldata _symbol,
+        string calldata _requestId,
+        bytes calldata _paymentReference,
         address _payer,
         address _payee,
         uint256 _amount
