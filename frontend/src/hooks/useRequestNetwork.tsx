@@ -18,9 +18,9 @@ import { useEthers } from './useEthers';
 
 type RequestNetworkHook = {
     createRequest: (
-        requestData: Types.IRequestData,
+        requestData: ClientTypes.IRequestInfo,
         paymentNetwork: PaymentTypes.PaymentNetworkCreateParameters,
-        invoice: InvoiceType,
+        invoice: InvoiceType | any,
     ) => Promise<Request>;
     getRequest: (requestId: string) => Promise<Request>;
     payRequest: (requestId: string, amount: BigNumber) => Promise<void>;
@@ -32,12 +32,13 @@ export const useRequestNetwork = (): RequestNetworkHook => {
     const { address } = useAccount();
     const { signer, provider } = useEthers();
 
-    const requestNetwork = useMemo(() => {
-        if (!walletClient) return;
-        const signatureProvider = new Web3SignatureProvider({
-            client: walletClient,
-            account: address,
-        });
+    const requestNetwork = useMemo<RequestNetwork>(() => {
+        if (!walletClient) {
+            throw new Error('Wallet client is required');
+        }
+        
+        const signatureProvider = new Web3SignatureProvider(walletClient);
+
         return new RequestNetwork({
             nodeConnectionConfig: {
                 baseURL: 'https://sepolia.gateway.request.network/',
@@ -45,14 +46,10 @@ export const useRequestNetwork = (): RequestNetworkHook => {
             signatureProvider,
         });
 
-    }, [walletClient, address]);
-
-    if (!requestNetwork) {
-        throw new Error('Request network not initialized');
-    }
+    }, [walletClient]);
 
     const createRequest = async (
-        requestData: Types.IRequestData,
+        requestData: ClientTypes.IRequestInfo,
         paymentNetwork: PaymentTypes.PaymentNetworkCreateParameters,
         invoice: InvoiceType,
     ): Promise<Request> => {
@@ -60,15 +57,15 @@ export const useRequestNetwork = (): RequestNetworkHook => {
         if (!requestData.payer) throw new Error('Create Request: Payer is required');
 
         try {
-            const request = await requestNetwork.createRequest({
+            const request = await requestNetwork?.createRequest({
                 requestInfo: requestData,
                 signer: requestData.payee,
                 paymentNetwork: paymentNetwork,
                 contentData: invoice,
             });
 
-            await request.waitForConfirmation();
-
+            await request?.waitForConfirmation();
+            
             return request;
         } catch (error) {
             console.error('Create Request Error', error);
@@ -80,7 +77,7 @@ export const useRequestNetwork = (): RequestNetworkHook => {
         if (!requestId) throw new Error('Get Request: Request ID is required');
 
         try {
-            const request = await requestNetwork.fromRequestId(requestId);
+            const request = await requestNetwork?.fromRequestId(requestId);
             return request;
         } catch (error) {
             console.error('Get Request Error', error);
@@ -111,7 +108,7 @@ export const useRequestNetwork = (): RequestNetworkHook => {
             throw new Error('Pay Request Error');
         }
     };
-
+    
     return {
         createRequest,
         getRequest,

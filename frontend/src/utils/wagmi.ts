@@ -5,8 +5,9 @@ import {
     createStorage,
     http,
 } from 'wagmi';
-import { anvil, mainnet, sepolia } from 'wagmi/chains';
+import { mainnet, sepolia } from 'wagmi/chains';
 import { walletConnect } from 'wagmi/connectors';
+import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
 
 import constants from './constants';
 export const projectId = constants.APP_API_KEY.walletConnect;
@@ -18,17 +19,8 @@ const metadata = {
     icons: constants.APP_ICONS,
 };
 
-const wagmiConfig: Config = createConfig({
-    chains: [mainnet, sepolia],
-    ssr: true,
-    storage: createStorage({
-        storage: cookieStorage,
-    }),
-    connectors: [walletConnect({ projectId, metadata, showQrModal: false })],
-    transports: {
-        [mainnet.id]: http(),
-        [sepolia.id]: http()
-    },
+const wagmiAdapter = new WagmiAdapter({
+    networks: [anvil, mainnet, sepolia],
 });
 
 export default wagmiConfig;
