@@ -1,13 +1,4 @@
-# Sample Hardhat Project
-
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
-
-Try running some of the following tasks:
-
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat ignition deploy ./ignition/modules/Lock.ts
-```
+| Contracts                  | Address                                                             |
+| -------------------------- | ------------------------------------------------------------------- |
+| PayChunkRegistry           | 0x35A10b981c2C4894DEa6aF9c67f5a1DF67D640a4                          |
+| DynamicInvoiceTokenFactory | 0xbc647ac9bae388f915b3db53858bbf4779ee09e8582a6db9e6b7c7Fbdcf2b970b |
