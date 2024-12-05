@@ -6,7 +6,6 @@ import { config as dotenvConfig } from 'dotenv';
 dotenvConfig();
 
 const accounts = process.env.DEPLOYER_PRIVATE_KEY ? [process.env.DEPLOYER_PRIVATE_KEY] : [];
-
 const config: HardhatUserConfig = {
   solidity: {
     version: "0.8.27",
