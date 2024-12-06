@@ -1,0 +1,75 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IDynamicInvoiceTokenEvents",
+  "sourceName": "contracts/interfaces/dynamic-invoice-token/IDynamicInvoiceTokenEvents.sol",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "invoice",
+          "type": "address"
+        }
+      ],
+      "name": "DynamicInvoiceTokenCanceled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "invoice",
+          "type": "address"
+        }
+      ],
+      "name": "DynamicInvoiceTokenPaid",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "invoice",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "childInvoice",
+          "type": "address"
+        }
+      ],
+      "name": "DynamicInvoiceTokenSpawned",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "invoice",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "progress",
+          "type": "uint8"
+        }
+      ],
+      "name": "DynamicInvoiceTokenUpdateProgress",
+      "type": "event"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
