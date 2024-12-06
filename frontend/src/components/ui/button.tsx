@@ -23,9 +23,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     switch (rest.variant) {
       case "solid":
         // bg={"bg.emphasized"} color={"fg"}
-        rest.bg = "bg.emphasized"
-        rest.color = "fg"
-        rest._hover = { bg: "bg.emphasized/75" }
+        rest.bg = rest.bg || "bg.emphasized"
+        rest.color = rest.color || "fg"
+        rest._hover = { opacity: 0.8 }
     }
 
     return (

@@ -59,3 +59,14 @@ export interface Invoice {
     miscellaneous?: Record<string, any>;
 }
 
+export interface DynamicInvoiceToken {
+    name: string;
+    symbol: string;
+    requestId: string;
+    paymentReference: string;
+    payer: string;
+    payee: string;
+    amount: string | number;
+    amountPaid: string | number;
+    status: 'pending' | 'partial_paid' | 'paid' | 'cancelled';
+}

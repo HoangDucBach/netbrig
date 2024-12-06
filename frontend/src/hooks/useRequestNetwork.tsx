@@ -78,7 +78,6 @@ export const useRequestNetwork = (): RequestNetworkHook => {
 
         try {
             const request = await requestNetwork?.fromRequestId(requestId);
-            console.log('Request', request);
             return request;
         } catch (error) {
             console.error('Get Request Error', error);
