@@ -83,7 +83,7 @@ const useDynamicInvoiceTokenFactory = (): DynamicInvoiceTokenHook => {
 
     const getDynamicInvoiceToken = async (_paymentReference: string): Promise<DynamicInvoiceToken> => {
         if (!_paymentReference) {
-            throw new Error('Payment Reference is required');
+            throw new Error('Get Dynamic Invoice Token: Payment Reference is required');
         }
 
         try {
@@ -117,10 +117,10 @@ const useDynamicInvoiceTokenFactory = (): DynamicInvoiceTokenHook => {
                 _payer: string,
                 _amount: number
             ) => {
-                if (!_requestId) throw new Error('Request ID is required');
-                if (!_paymentReference) throw new Error('Payment Reference is required');
-                if (!_payer) throw new Error('Payer is required');
-                if (!_amount) throw new Error('Amount is required');
+                if (!_requestId) throw new Error('Spawn Child: Request ID is required');
+                if (!_paymentReference) throw new Error('Spawn Child: Payment Reference is required');
+                if (!_payer) throw new Error('Spawn Child: Payer is required');
+                if (!_amount) throw new Error('Spawn Child: Amount is required');
 
                 try {
                     const tx = await tokenContract.spawnChild(

@@ -3,7 +3,7 @@ import {
   AbsoluteCenter,
   Button as ChakraButton,
   Span,
-  Spinner,
+  Spinner
 } from "@chakra-ui/react"
 import * as React from "react"
 
@@ -12,13 +12,24 @@ interface ButtonLoadingProps {
   loadingText?: React.ReactNode
 }
 
-export interface ButtonProps extends ChakraButtonProps, ButtonLoadingProps {}
+export interface ButtonProps extends ChakraButtonProps, ButtonLoadingProps { }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(props, ref) {
     const { loading, disabled, loadingText, children, ...rest } = props
+
+    rest.variant = rest.variant || "solid"
+
+    switch (rest.variant) {
+      case "solid":
+        // bg={"bg.emphasized"} color={"fg"}
+        rest.bg = "bg.emphasized"
+        rest.color = "fg"
+        rest._hover = { bg: "bg.emphasized/75" }
+    }
+
     return (
-      <ChakraButton disabled={loading || disabled} ref={ref} {...rest}>
+      <ChakraButton padding={"4"} fontWeight={"semibold"} disabled={loading || disabled} ref={ref} {...rest}>
         {loading && !loadingText ? (
           <>
             <AbsoluteCenter display="inline-flex">
