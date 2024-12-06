@@ -78,6 +78,7 @@ export const useRequestNetwork = (): RequestNetworkHook => {
 
         try {
             const request = await requestNetwork?.fromRequestId(requestId);
+            console.log('Request', request);
             return request;
         } catch (error) {
             console.error('Get Request Error', error);
@@ -114,8 +115,8 @@ export const useRequestNetwork = (): RequestNetworkHook => {
 
         try {
             const request = await requestNetwork.fromRequestId(requestId);
-            const salt = request.getData().extensions[Types.Extension.PAYMENT_NETWORK_ID.ETH_FEE_PROXY_CONTRACT].values.salt
-            const paymentAddress = request.getData().extensions[Types.Extension.PAYMENT_NETWORK_ID.ETH_FEE_PROXY_CONTRACT].values.paymentAddress
+            const salt = request.getData().extensionsData[0].parameters.salt.toString();
+            const paymentAddress = request.getData().extensionsData[0].parameters.paymentAddress;
 
             return PaymentReferenceCalculator.calculate(
                 requestId,
