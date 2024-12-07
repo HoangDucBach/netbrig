@@ -1,14 +1,13 @@
 "use client";
 
-import { useSearchParams, useRouter } from 'next/navigation'
-import { Flex, Heading, Text, Separator, ProgressLabel, Skeleton } from "@chakra-ui/react";
+import { useSearchParams } from 'next/navigation'
+import { Flex, Heading, Text, Separator, Skeleton } from "@chakra-ui/react";
 import React from "react";
-import { CreditCardPosIcon, DollarReceive01Icon, DollarSend01Icon, Search01Icon, SidebarTopIcon } from 'hugeicons-react';
+import { CreditCardPosIcon, DollarReceive01Icon, DollarSend01Icon, InformationCircleIcon, Search01Icon, SidebarTopIcon } from 'hugeicons-react';
 import { useContracts, useRequestNetwork } from '@/hooks';
 import { DynamicInvoiceToken } from '@/types';
-import { Request, Types } from '@requestnetwork/request-client.js';
+import { Request } from '@requestnetwork/request-client.js';
 import { useQuery } from "@tanstack/react-query";
-import { ethers } from "ethers";
 
 import ProgressBar from "@/components/view/ProgressBar"
 import { Button } from '@/components/ui/button';
@@ -82,8 +81,6 @@ export function Panel({ className, ...props }: Props) {
             <Skeleton height={"32"} width="full" rounded={"lg"} />
         )
 
-        if (invoiceTokenQuery.isError) return null;
-
         if (!invoiceToken) return (
             <Text
                 fontSize={"md"}
@@ -97,10 +94,11 @@ export function Panel({ className, ...props }: Props) {
         return (
             <ItemGroup>
                 <Flex direction={"column"} gap={"4"}>
-                    <Flex direction={"column"} gap={"4"} width={"full"}>
+                    <Flex direction={"row"} justifyContent={"space-between"} width={"full"}>
                         <Heading size={"md"} fontWeight={"semibold"} width={"full"} truncate>
                             {invoiceToken?.name}
                         </Heading>
+                        <InformationCircleIcon />
                     </Flex>
                     <Flex direction={"column"} gap={"4"} width={"full"} rounded={"2xl"} bg={"bg.emphasized"} p={"4"}>
                         <Flex width={"full"} justifyContent={"space-between"} alignItems={"center"}>

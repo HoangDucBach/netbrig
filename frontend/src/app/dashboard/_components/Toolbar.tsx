@@ -1,11 +1,14 @@
 "use client";
 
+import { CreateInvoiceTokenFormWrapper } from "@/components/form/CreateInvoiceTokenForm";
 import { Button } from "@/components/ui/button";
 import { InputGroup } from "@/components/ui/input-group";
-import { useContracts } from "@/hooks";
+import { DynamicInvoiceTokenViewCard } from "@/components/view/DynamicInvoiceTokenCard";
+import { mockDynamicInvoiceTokens } from "@/mock";
 import { Flex, Heading, Text, Input, Separator, Image, Span } from "@chakra-ui/react";
 import { useAppKit, useWalletInfo } from "@reown/appkit/react";
-import { Add01Icon, Copy01Icon, CreditCardPosIcon, Search01Icon, WorkflowCircle06Icon } from "hugeicons-react";
+import { Copy01Icon, CreditCardPosIcon, Search01Icon, WorkflowCircle06Icon } from "hugeicons-react";
+import React from "react";
 import { useAccount } from "wagmi";
 1
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
@@ -15,7 +18,24 @@ export function Toolbar({ className, ...props }: Props) {
     const { address } = useAccount();
     const { walletInfo } = useWalletInfo();
     const { open } = useAppKit();
-    const {dynamicInvoiceTokenFactory} = useContracts();
+
+    const ItemGroup = ({ ...props }: React.PropsWithChildren<{
+        label?: string;
+        icon?: React.ReactNode;
+    }>) => {
+        const { label, icon, children } = props;
+
+        return (
+            <Flex width={"full"} direction={"column"} gap={"4"} flex={"1"}>
+                <Flex direction={"row"} justifyContent={"space-between"}>
+                    <Text fontSize={"md"} fontWeight={"semibold"}>{label}</Text>
+                    {icon}
+                </Flex>
+                <Separator />
+                {children}
+            </Flex>
+        )
+    }
 
     const Search = () => {
         return (
@@ -51,15 +71,9 @@ export function Toolbar({ className, ...props }: Props) {
     }
 
     const CoreOperations = () => {
-        const handleCreateInvoiceToken = async () => {
-            
-        }
         return (
-            <Flex direction={"column"} gap={"4"} width={"full"} flex={"1"}>
-                <Button width={"full"} rounded={"lg"} justifyContent={"start"}>
-                    <Span><Add01Icon /></Span>
-                    Create Invoice Token
-                </Button>
+            <Flex direction={"column"} gap={"4"} width={"full"} height={"fit"}>
+                <CreateInvoiceTokenFormWrapper />
                 <Button width={"full"} rounded={"lg"} justifyContent={"start"}>
                     <Span><CreditCardPosIcon /></Span>
                     Pay
@@ -67,7 +81,19 @@ export function Toolbar({ className, ...props }: Props) {
             </Flex>
         )
     }
-
+    const MyInvoiceToken = () => {
+        return (
+            <ItemGroup label={"My Invoice Token"}>
+                <Flex direction={"column"} gap={"4"} height={"full"} overflow={"scroll"} maxH={"full"}>
+                    {
+                        mockDynamicInvoiceTokens.map((invoiceToken, index) => (
+                            <DynamicInvoiceTokenViewCard key={index} invoiceToken={invoiceToken} />
+                        ))
+                    }
+                </Flex>
+            </ItemGroup>
+        )
+    }
     const WalletPanel = () => {
         if (!address) return null;
 
@@ -81,11 +107,12 @@ export function Toolbar({ className, ...props }: Props) {
                 color={"primary.on-primary"}
                 justifyContent={"center"}
                 alignItems={"center"}
+                overflow={"hidden"}
                 onClick={() => {
                     open();
                 }}
             >
-                <Image src={walletInfo?.icon} width={"6"} height={"6"} />
+                <Image src={walletInfo?.icon} width={"6"} height={"6"} alt={walletInfo?.name} />
                 <Text flex={"1"} fontWeight={"medium"}>
                     {
                         address?.slice(0, 6) + "..." + address?.slice(-6)
@@ -104,6 +131,7 @@ export function Toolbar({ className, ...props }: Props) {
         <Flex
             backgroundColor={"#161616/95"}
             backdropFilter={"blur(32px)"}
+            overflow={"auto"}
             direction={"column"}
             rounded={"3xl"}
             top={"50%"}
@@ -114,13 +142,15 @@ export function Toolbar({ className, ...props }: Props) {
             height={"95%"}
             width={"64"}
             padding={"4"}
+            gap={"4"}
             borderTopColor={"ActiveBorder/25"}
             borderTopWidth={"1px"}
-            zIndex={"max"}
+            zIndex={"sticky"}
             {...props}
         >
             <Header />
             <CoreOperations />
+            <MyInvoiceToken />
             <WalletPanel />
         </Flex>
     )

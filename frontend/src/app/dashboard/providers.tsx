@@ -1,7 +1,6 @@
 "use client";
 
-interface Props extends React.PropsWithChildren<{}> { }
-export default function Providers({ children }: Props) {
+export default function Providers({ children }:  React.PropsWithChildren) {
     return (
         <>
             {children}

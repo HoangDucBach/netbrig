@@ -117,11 +117,17 @@ export const useRequestNetwork = (): RequestNetworkHook => {
             const salt = request.getData().extensionsData[0].parameters.salt.toString();
             const paymentAddress = request.getData().extensionsData[0].parameters.paymentAddress;
 
-            return PaymentReferenceCalculator.calculate(
+            const paymentReference = PaymentReferenceCalculator.calculate(
                 requestId,
                 salt,
                 paymentAddress,
             );
+
+            if (!paymentReference.startsWith('0x')) {
+                return '0x' + paymentReference;
+            }
+
+            return paymentReference;
         } catch (error) {
             console.error('Calculate Payment Reference Error', error);
             throw new Error('Calculate Payment Reference Error');

@@ -33,7 +33,7 @@ createAppKit({
     },
 })
 
-interface Props extends React.PropsWithChildren<{}> { }
+interface Props extends React.PropsWithChildren { }
 export default function Providers({ children }: Props) {
     return (
         <ChakraProvider value={system}>

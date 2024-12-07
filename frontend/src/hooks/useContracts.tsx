@@ -6,6 +6,8 @@ import DynamicInvoiceTokenContract from '@/artifacts/DynamicInvoiceToken.json';
 import utils from '@/utils';
 import { useEthers } from './useEthers';
 import { DynamicInvoiceToken } from '@/types';
+import { useRequestNetwork } from './useRequestNetwork';
+import { Types } from '@requestnetwork/request-client.js';
 
 
 type DynamicInvoiceTokenFactoryHook = {
@@ -21,6 +23,8 @@ type DynamicInvoiceTokenFactoryHook = {
     getDynamicInvoiceToken: (_paymentReference: string) => Promise<DynamicInvoiceToken>;
 
     getDynamicInvoiceTokenAddress(_paymentReference: string): Promise<string>;
+
+    getAllDynamicInvoiceTokensRelatedToSigner(): Promise<string[]>;
 };
 
 type DynamicInvoiceTokenHook = {
@@ -34,6 +38,7 @@ type ContractsHooks = {
 };
 
 const useDynamicInvoiceTokenFactory = (): DynamicInvoiceTokenFactoryHook => {
+    const { requestNetwork, calulatePaymentReference } = useRequestNetwork();
     if (!utils.core.DYNAMIC_INVOICE_TOKEN_FACTORY_ADDRESS) {
         throw new Error('DYNAMIC_INVOICE_TOKEN_FACTORY_ADDRESS not set');
     }
@@ -65,7 +70,7 @@ const useDynamicInvoiceTokenFactory = (): DynamicInvoiceTokenFactoryHook => {
             _paymentReference,
             _payer,
             _payee,
-            ethers.utils.parseUnits(_amount.toString(), 18) // Chuyển đổi số lượng sang đơn vị token
+            ethers.utils.parseUnits(_amount.toString(), 18)
         );
         return tx;
     };
@@ -179,6 +184,10 @@ const useDynamicInvoiceTokenFactory = (): DynamicInvoiceTokenFactoryHook => {
             throw new Error('Get Dynamic Invoice Token Address: Payment Reference is required');
         }
 
+        if (!_paymentReference.startsWith('0x')) {
+            _paymentReference = '0x' + _paymentReference;
+        }
+
         try {
             const result = await contract.getDynamicInvoiceToken(_paymentReference);
             return result;
@@ -187,10 +196,38 @@ const useDynamicInvoiceTokenFactory = (): DynamicInvoiceTokenFactoryHook => {
             throw new Error('Get Dynamic Invoice Token Address: Failed');
         }
     };
+
+    const getAllDynamicInvoiceTokensRelatedToSigner = async (): Promise<string[]> => {
+        try {
+            const identityAddress = await signer?.getAddress();
+            const requests = await requestNetwork?.fromIdentity({
+                type: Types.Identity.TYPE.ETHEREUM_ADDRESS,
+                value: identityAddress as string,
+            });
+            if (!requests) return [];
+
+            const result = [];
+            for (const request of requests) {
+                const paymentReference = await calulatePaymentReference(request.requestId);
+                const tokenAddress = await getDynamicInvoiceTokenAddress(paymentReference);
+                if (tokenAddress) {
+                    result.push(tokenAddress);
+                }
+
+            }
+
+            return result;
+        } catch (error) {
+            console.log(error);
+            throw new Error('Get All Dynamic Invoice Tokens Related To Signer: Failed');
+        }
+    };
+
     return {
         createDynamicInvoiceToken,
         getDynamicInvoiceToken,
         getDynamicInvoiceTokenAddress,
+        getAllDynamicInvoiceTokensRelatedToSigner,
     };
 };
 

@@ -7,23 +7,20 @@ import { ethers } from "ethers";
 import { DynamicInvoiceToken } from "@/types";
 import { useContracts, useRequestNetwork } from "@/hooks";
 import {
-    DialogBackdrop,
     DialogBody,
     DialogCloseTrigger,
     DialogContent,
-    DialogFooter,
     DialogHeader,
     DialogRoot,
-    DialogTitle,
     DialogTrigger,
 } from "../ui/dialog"
-import { useSearchParams } from "next/navigation";
 
 import { Button } from "../ui/button";
 import { InputGroup } from "../ui/input-group";
 import React from "react";
 import { Types } from "@requestnetwork/request-client.js";
 import { toast } from "react-toastify";
+import { useInvoiceToken as useDynamicInvoiceToken } from "@/context/invoiceToken";
 
 type FormValues = {
     amount: DynamicInvoiceToken["amount"];
@@ -33,8 +30,7 @@ type FormValues = {
 interface Props extends React.HTMLAttributes<HTMLFormElement> { }
 
 const SplitForm = ({ ...rest }: Props) => {
-    const searchParams = useSearchParams();
-    const id = searchParams.get("id");
+    const dynamicInvoiceToken = useDynamicInvoiceToken();
 
     const { dynamicInvoiceTokenFactory } = useContracts();
     const { createRequest, calulatePaymentReference } = useRequestNetwork();
@@ -43,14 +39,10 @@ const SplitForm = ({ ...rest }: Props) => {
     } } = useForm<FormValues>();
 
     const onSubmit = async (data: FormValues) => {
-        if (!id) return;
+        if (!dynamicInvoiceToken) return;
 
         try {
-            const invoiceToken = await dynamicInvoiceTokenFactory.getDynamicInvoiceToken(await calulatePaymentReference(id));
-
-            if (!invoiceToken) {
-                throw new Error("Invoice not found");
-            }
+            const invoiceToken = dynamicInvoiceToken;
 
             const addressOfInvoiceToken = await dynamicInvoiceTokenFactory.getDynamicInvoiceTokenAddress(invoiceToken.paymentReference);
 

@@ -9,6 +9,8 @@ import { Handle, Position } from '@xyflow/react';
 import { SplitFormWrapper } from "../form/SplitForm";
 import { useContracts } from "@/hooks";
 import { toast } from "react-toastify";
+import { CircleProgressBar } from "./CircleProgressBar";
+import { DynamicInvoiceTokenContext } from "@/context/invoiceToken";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     invoiceToken?: {
@@ -21,7 +23,8 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
         status: DynamicInvoiceToken["status"];
         payee: DynamicInvoiceToken["payee"];
         payer: DynamicInvoiceToken["payer"];
-    }
+    },
+    onlyView?: boolean;
 }
 
 // Function to generate a color based on a string (id) with alpha
@@ -62,7 +65,7 @@ const generateColorFromId = (id: string, light: number = 1) => {
     return color;
 };
 
-export const DynamicInvoiceTokenCard = ({ invoiceToken, ...rest }: Props) => {
+export const DynamicInvoiceTokenCard = ({ invoiceToken, onlyView = false, ...rest }: Props) => {
     const { dynamicInvoiceTokenFactory } = useContracts();
 
     const backgroundColor = generateColorFromId(invoiceToken?.requestId!, 0.25);
@@ -73,6 +76,8 @@ export const DynamicInvoiceTokenCard = ({ invoiceToken, ...rest }: Props) => {
             const { paymentReference } = invoiceToken;
             const invoice = await dynamicInvoiceTokenFactory.getDynamicInvoiceToken(paymentReference);
             await invoice.pay();
+
+            toast.success("Invoice paid successfully");
         } catch (error) {
             toast.error("Failed to pay invoice");
         }
@@ -90,21 +95,66 @@ export const DynamicInvoiceTokenCard = ({ invoiceToken, ...rest }: Props) => {
     };
 
     return (
+        <DynamicInvoiceTokenContext.Provider value={invoiceToken as any}>
+            <Flex
+                {...rest}
+                backgroundColor={backgroundColor}
+                padding="2"
+                minW={"64"}
+                gap={"2"}
+                rounded="2xl"
+                direction={"column"}
+                w={"fit-content"}
+                h={"fit-content"}
+                cursor={"pointer"}
+            >
+                {!onlyView && <>
+                    <Handle position={Position.Bottom} type="target" />
+                    <Handle position={Position.Top} type="source" />
+                </>}
+                <Flex direction={"row"} gap={"4"} w={"fit"}>
+                    <Center w={"12"} h={"12"} rounded={"lg"} bg={color}>
+                        <InvoiceIcon />
+                    </Center>
+                    <Flex direction={"column"}>
+                        <Heading size={"md"} as={"h6"}>{invoiceToken?.name || "-"}</Heading>
+                        <Flex direction={"row"} gap={"1"} color={"fg.muted"}>
+                            <Coins01Icon size={16} />
+                            <Text fontSize={"xs"} >{invoiceToken?.amount || "0.00"} {"ETH"}</Text>
+                        </Flex>
+                    </Flex>
+                    <CircleProgressBar progress={(invoiceToken?.amountPaid || 0) * 100 / (invoiceToken?.amount || 1)} color={color} />
+                </Flex>
+                {!onlyView && <CoreOperations />}
+            </Flex>
+        </DynamicInvoiceTokenContext.Provider>
+    );
+};
+
+export const DynamicInvoiceTokenViewCard = ({ invoiceToken, onlyView = false, ...rest }: Props) => {
+    const backgroundColor = generateColorFromId(invoiceToken?.requestId!, 0.25);
+    const color = generateColorFromId(invoiceToken?.requestId!, 1);
+
+    const progress = (invoiceToken?.amountPaid || 0) * 100 / (invoiceToken?.amount || 1);
+    const radius = 20;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference - (progress / 100) * circumference;
+
+
+    return (
         <Flex
-            {...rest}
-            backgroundColor={backgroundColor}
             padding="2"
-            minW={"64"}
             gap={"2"}
             rounded="2xl"
             direction={"column"}
-            w={"fit-content"}
+            w={"w-full"}
             h={"fit-content"}
+            alignItems={"center"}
             cursor={"pointer"}
+            bg={"bg.emphasized"}
+            {...rest}
         >
-            <Handle position={Position.Bottom} type="source" />
-            <Handle position={Position.Top} type="target" />
-            <Flex direction={"row"} gap={"4"} w={"fit"}>
+            <Flex direction={"row"} gap={"4"} w={"full"}>
                 <Center w={"12"} h={"12"} rounded={"lg"} bg={color}>
                     <InvoiceIcon />
                 </Center>
@@ -115,8 +165,8 @@ export const DynamicInvoiceTokenCard = ({ invoiceToken, ...rest }: Props) => {
                         <Text fontSize={"xs"} >{invoiceToken?.amount || "0.00"} {"ETH"}</Text>
                     </Flex>
                 </Flex>
+                <CircleProgressBar progress={progress} color={color} />
             </Flex>
-            <CoreOperations />
         </Flex>
     );
 };

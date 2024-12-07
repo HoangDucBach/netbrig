@@ -1,6 +1,6 @@
 import { Logo } from "@/components/Icons";
 import utils from "@/utils";
-import { Box, Center, Flex, Heading, Text } from "@chakra-ui/react";
+import { Center, Flex, Heading, Text } from "@chakra-ui/react";
 import React from "react";
 import { DashboardSquare02Icon, InvoiceIcon } from "hugeicons-react"
 import { WalletOption } from "./WalletOptions";
@@ -29,7 +29,7 @@ export function Navbar({ className, ...props }: Props) {
             { label: "Home", href: "/dashboard", icon: < DashboardSquare02Icon /> },
             { label: "Invoices", href: "/invoices", icon: < InvoiceIcon /> },
         ]
-        const NavItem = ({ label, href, icon }: { label: string, href: string, icon: React.ReactNode }) => {
+        const NavItem = ({ label, icon }: { label: string, href: string, icon: React.ReactNode }) => {
             return (
                 <Flex
                     alignItems={"center"}

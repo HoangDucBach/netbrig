@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import Providers from "./providers";
 import '@xyflow/react/dist/style.css';
 import { Panel } from "./_components/Panel";

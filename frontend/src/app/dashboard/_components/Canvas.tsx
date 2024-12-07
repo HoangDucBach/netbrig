@@ -12,7 +12,7 @@ import {
     BackgroundVariant,
     Controls,
 } from '@xyflow/react';
-import React, { use, useCallback } from 'react';
+import React, { useCallback } from 'react';
 
 import { DynamicInvoiceTokenCard } from '@/components/view/DynamicInvoiceTokenCard';
 import { Box } from '@chakra-ui/react';
@@ -27,20 +27,21 @@ const nodeTypes = {
         );
     }),
 }
+nodeTypes.dynamicInvoiceToken.displayName = 'DynamicInvoiceTokenNode';
 
 export function Canvas({ className, ...props }: Props) {
     const searchParams = useSearchParams();
     const id = searchParams.get("id");
     const { dynamicInvoiceTokenFactory, dynamicInvoiceToken } = useContracts();
     const { calulatePaymentReference } = useRequestNetwork();
-    const { data: invoiceToken, ...invoiceTokenQuery } = useQuery<DynamicInvoiceToken>({
-        queryKey: ["invoiceToken", id],
-        queryFn: async () => {
-            const paymentReference = await calulatePaymentReference(id!);
-            const invoiceToken = await dynamicInvoiceTokenFactory.getDynamicInvoiceToken(paymentReference);
-            return invoiceToken
-        },
-    });
+    // const { data: invoiceToken } = useQuery<DynamicInvoiceToken>({
+    //     queryKey: ["invoiceToken", id],
+    //     queryFn: async () => {
+    //         const paymentReference = await calulatePaymentReference(id!);
+    //         const invoiceToken = await dynamicInvoiceTokenFactory.getDynamicInvoiceToken(paymentReference);
+    //         return invoiceToken
+    //     },
+    // });
 
 
     const [nodes, setNodes, onNodesChange] = useNodesState([] as any);
@@ -51,10 +52,7 @@ export function Canvas({ className, ...props }: Props) {
         [setEdges],
     );
 
-    const generateAllNodesWithChilds = async (invoiceToken: DynamicInvoiceToken) => {
-        const x = Math.floor(Math.random() * 1000);
-        const y = Math.floor(Math.random() * 1000);
-
+    const generateAllNodesWithChilds = useCallback(async (invoiceToken: DynamicInvoiceToken, x: number, y: number) => {
         setNodes((nodes) => {
             const newNodes = [...nodes];
             newNodes.push({
@@ -67,12 +65,13 @@ export function Canvas({ className, ...props }: Props) {
         });
 
         if (invoiceToken.children) {
-            invoiceToken.children.forEach(async childAddress => {
+            for (const childAddress of invoiceToken.children) {
                 const childInvoiceToken = await dynamicInvoiceToken.getDynamicInvoiceToken(childAddress);
 
-                generateAllNodesWithChilds(childInvoiceToken);
                 const xChild = x + Math.floor(Math.random() * 10) + 256;
                 const yChild = y + Math.floor(Math.random() * 10) + 256;
+
+                await generateAllNodesWithChilds(childInvoiceToken, xChild, yChild);
 
                 setNodes((nodes) => {
                     const newNodes = [...nodes];
@@ -94,16 +93,21 @@ export function Canvas({ className, ...props }: Props) {
                     });
                     return newEdges;
                 });
+            }
+        }
+    }, [dynamicInvoiceToken, setNodes, setEdges]);
 
-            });
-        }
-    }
-    // recursion to create the nodes
     React.useEffect(() => {
-        if (invoiceToken) {
-            generateAllNodesWithChilds(invoiceToken);
+        if (id) {
+            const fetchData = async () => {
+                const paymentReference = await calulatePaymentReference(id);
+                const invoiceToken = await dynamicInvoiceTokenFactory.getDynamicInvoiceToken(paymentReference);
+                await generateAllNodesWithChilds(invoiceToken, 0, 0);
+            };
+
+            fetchData();
         }
-    }, [invoiceToken]);
+    }, [id, calulatePaymentReference, dynamicInvoiceTokenFactory, generateAllNodesWithChilds]);
 
     return (
         <Box

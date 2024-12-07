@@ -1,12 +1,5 @@
-import {
-    type Config,
-    cookieStorage,
-    createConfig,
-    createStorage,
-    http,
-} from 'wagmi';
+
 import { mainnet, sepolia } from 'wagmi/chains';
-import { walletConnect } from 'wagmi/connectors';
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
 import constants from './constants';
 

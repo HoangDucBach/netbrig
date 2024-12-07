@@ -5,7 +5,7 @@ import {ToastContainer} from "react-toastify";
 import "./globals.css";
 import Providers from "./providers";
 import utils from "@/utils";
-import { Box, Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import 'react-toastify/dist/ReactToastify.css';
 
