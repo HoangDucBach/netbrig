@@ -11,14 +11,6 @@ const Navbar = dynamic(() => import("./_components/Navbar").then((mod) => mod.Na
   ssr: false,
 });
 
-const Panel = dynamic(() => import("./_components/Panel").then((mod) => mod.Panel), {
-  ssr: false,
-});
-
-const Toolbar = dynamic(() => import("./_components/Toolbar").then((mod) => mod.Toolbar), {
-  ssr: false,
-});
-
 export const metadata: Metadata = {
   title: utils.constants.APP_NAME,
   description: utils.constants.APP_DESCRIPTION,
@@ -41,8 +33,6 @@ export default function RootLayout({
           <Flex direction={"column"} padding={"4"} width={"full"} height={"svh"} flex={"1"}>
             <Navbar />
             <Flex flex={"1"} position={"relative"}>
-              <Toolbar />
-              <Panel />
               {children}
             </Flex>
           </Flex>

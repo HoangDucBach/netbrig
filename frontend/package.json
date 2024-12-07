@@ -19,6 +19,8 @@
     "@requestnetwork/types": "^0.45.1",
     "@requestnetwork/web3-signature": "^0.8.1",
     "@wagmi/cli": "^2.1.18",
+    "@xyflow/react": "^12.3.5",
+    "copy-to-clipboard": "^3.3.3",
     "hugeicons-react": "^0.3.0",
     "next": "14.2.12",
     "next-themes": "^0.4.3",
@@ -39,4 +41,3 @@
     "typescript": "^5"
   }
 }
-

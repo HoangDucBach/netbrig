@@ -205,7 +205,7 @@ export function Panel({ className, ...props }: Props) {
     return (
         <Flex
             backgroundColor={"#2A2A2A/50"}
-            backdropBlur={"lg"}
+            backdropFilter={"blur(32px)"}
             direction={"column"}
             rounded={"3xl"}
             top={"50%"}
