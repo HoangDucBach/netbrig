@@ -10,7 +10,7 @@ import { useAppKit, useWalletInfo } from "@reown/appkit/react";
 import { Copy01Icon, CreditCardPosIcon, Search01Icon, WorkflowCircle06Icon } from "hugeicons-react";
 import React from "react";
 import { useAccount } from "wagmi";
-1
+
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
