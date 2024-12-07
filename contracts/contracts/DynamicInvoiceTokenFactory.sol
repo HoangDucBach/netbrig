@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
+import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 
 import "./interfaces/IDynamicInvoiceTokenFactory.sol";
 
 import "./DynamicInvoiceToken.sol";
 import "./DynamicInvoiceTokenDeployer.sol";
+import "./PayChunkRegistry.sol";
 
 /**
  * @title DynamicInvoiceTokenFactory
@@ -24,25 +25,32 @@ contract DynamicInvoiceTokenFactory is
     address public override owner;
 
     /// @inheritdoc IDynamicInvoiceTokenFactory
-    mapping(string => address) public override getDynamicInvoiceToken;
+    mapping(bytes => address) public override getDynamicInvoiceToken;
 
-    constructor() {
+    /// @dev PayChunkRegistry contract
+    address public registry;
+
+    constructor(address _registry) {
         _grantRole(OWNER_ROLE, msg.sender);
+
         owner = msg.sender;
+        registry = _registry;
 
         emit OwnerChanged(address(0), msg.sender);
     }
 
     /// @inheritdoc IDynamicInvoiceTokenFactory
     function createDynamicInvoiceToken(
-        string memory _name,
-        string memory _symbol,
+        string calldata _name,
+        string calldata _symbol,
+        string calldata _requestId,
+        bytes calldata _paymentReference,
         address _payer,
         address _payee,
-        string memory _requestId
+        uint256 _amount
     ) external override returns (address dynamicInvoiceToken) {
         require(
-            getDynamicInvoiceToken[_requestId] == address(0),
+            getDynamicInvoiceToken[_paymentReference] == address(0),
             "DynamicInvoiceTokenFactory: The dynamic invoice token is already created"
         );
 
@@ -50,19 +58,22 @@ contract DynamicInvoiceTokenFactory is
             _payer != address(0) && _payee != address(0),
             "DynamicInvoiceTokenFactory: Payer and payee must not be zero address"
         );
-        
+
         dynamicInvoiceToken = deploy(
+            registry,
             address(this),
             _name,
             _symbol,
+            _requestId,
+            _paymentReference,
             _payer,
             _payee,
-            _requestId
+            _amount
         );
 
-        getDynamicInvoiceToken[_requestId] = dynamicInvoiceToken;
+        getDynamicInvoiceToken[_paymentReference] = dynamicInvoiceToken;
 
-        emit DynamicInvoiceTokenCreated(dynamicInvoiceToken, _requestId);
+        emit DynamicInvoiceTokenCreated(dynamicInvoiceToken, _paymentReference);
     }
 
     /// @inheritdoc IDynamicInvoiceTokenFactory

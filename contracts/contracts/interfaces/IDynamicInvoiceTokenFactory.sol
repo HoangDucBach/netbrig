@@ -3,14 +3,15 @@ pragma solidity ^0.8.27;
 
 /**
  * @title IDynamicInvoiceTokenFactory
+ * @notice A contract that creates dynamic invoice tokens
  */
 interface IDynamicInvoiceTokenFactory {
     /// @notice This event is emitted when a dynamic invoice token is created
     /// @param dynamicInvoiceToken The address of the dynamic invoice token
-    /// @param requestId The request ID of the invoice
+    /// @param paymentReference The payment reference of the invoice
     event DynamicInvoiceTokenCreated(
         address indexed dynamicInvoiceToken,
-        string requestId
+        bytes paymentReference
     );
 
     /// @notice Emitted when the owner of the factory is changed
@@ -26,23 +27,27 @@ interface IDynamicInvoiceTokenFactory {
     /// @notice This function creates a dynamic invoice token
     /// @param _name The name of the token
     /// @param _symbol The symbol of the token
+    /// @param _requestId The request ID of the invoice
+    /// @param _paymentReference The payment reference of the invoice
     /// @param _payer The payer of the invoice
     /// @param _payee The payee of the invoice
-    /// @param _requestId The request ID of the invoice
+    /// @param _amount The amount of the invoice
     /// @return The address of the dynamic invoice token
     function createDynamicInvoiceToken(
-        string memory _name,
-        string memory _symbol,
+        string calldata _name,
+        string calldata _symbol,
+        string calldata _requestId,
+        bytes calldata _paymentReference,
         address _payer,
         address _payee,
-        string memory _requestId
+        uint256 _amount
     ) external returns (address);
 
     /// @notice Get the address of the dynamic invoice token
-    /// @param _requestId The request ID of the invoice
+    /// @param _paymentReference The payment reference of the invoice
     /// @return The address of the dynamic invoice token
     function getDynamicInvoiceToken(
-        string memory _requestId
+        bytes calldata _paymentReference
     ) external view returns (address);
 
     /// @notice Updates the owner of the factory

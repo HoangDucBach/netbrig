@@ -1,0 +1,64 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IDynamicInvoiceTokenDeployer",
+  "sourceName": "contracts/interfaces/IDynamicInvoiceTokenDeployer.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "parameters",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "registry",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "factory",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "symbol",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "requestId",
+          "type": "string"
+        },
+        {
+          "internalType": "bytes",
+          "name": "paymentReference",
+          "type": "bytes"
+        },
+        {
+          "internalType": "address",
+          "name": "payer",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "payee",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

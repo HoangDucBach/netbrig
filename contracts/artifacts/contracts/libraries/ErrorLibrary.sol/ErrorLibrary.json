@@ -1,0 +1,116 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "ErrorLibrary",
+  "sourceName": "contracts/libraries/ErrorLibrary.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "AlreadyInitialized",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "AlreadyPaid",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "AlreadyPartialPaid",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "AlreadyPending",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "AlreadyState",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InsufficientFunds",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InternalError",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidAddress",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidValue",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "MathError",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotBlacklisted",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotFound",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotInitialized",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotPaid",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotPartialPaid",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotPending",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotState",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotWhitelisted",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "TransferFailed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Unauthorized",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ZeroValue",
+      "type": "error"
+    }
+  ],
+  "bytecode": "0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220321cede64d176e4f2c115bfc5812583bae6851253e3263f38ba8a3321f1c7b9b64736f6c634300081b0033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220321cede64d176e4f2c115bfc5812583bae6851253e3263f38ba8a3321f1c7b9b64736f6c634300081b0033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

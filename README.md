@@ -3,7 +3,7 @@
 </p>
 <p align="center">
 <b>
-Scholarship Platform for Students
+NFT platform allows splitting payment invoices
 </b>
 </p>
 
@@ -15,38 +15,35 @@ Scholarship Platform for Students
   - [🎯 Product Goal](#-product-goal)
 - [👥 User Stories](#-user-stories)
 - [❗ Problem Statement](#-problem-statement)
-  - [Rigid Payment Structures](#rigid-payment-structures)
   - [Limited Flexibility for Shared Payments](#limited-flexibility-for-shared-payments)
-  - [Lack of Real-Time Price Adjustments](#lack-of-real-time-price-adjustments)
-  - [Inefficiencies in Invoice Management](#inefficiencies-in-invoice-management)
+  - [Rigid payment structure](#rigid-payment-structure)
+  - [Inefficiency in invoice management](#inefficiency-in-invoice-management)
+  - [Risks with traditional authorization methods](#risks-with-traditional-authorization-methods)
 - [💡 PayChunk Solution](#-paychunk-solution)
 - [🛠️ Architecture Diagram](#️-architecture-diagram)
 - [📋 Requirement Analysis](#-requirement-analysis)
 
 ## 🌟 Introduction
 
-**PayChunk** is a revolutionary platform for dynamic invoicing, allowing businesses and individuals to seamlessly create, manage and split invoices. Powered by blockchain technology, NFTs and seamlessly integrated with Request Network, Pay Chunk offers unparalleled flexibility in payment management, enabling automated price adjustments, shared payments and transparent tracking.
+**PayChunk** is a revolutionary platform for dynamic invoicing, allowing businesses and individuals to create, manage, and split invoices based on NFTs (ERC-721) and Request Network protocols. 
 
 ### Why Request Network?
 
-PayChunk utilizes Request Network as a core component to enhance the payment and disbursement processes for scholarships. Here’s why Request Network is the ideal choice:
+PayChunk uses Request Network as its core component for invoice creation and payment. Here’s why Request Network is the ideal choice:
 
 **1. Transparency:**  
-Request Network ensures that every financial transaction, including scholarship disbursements, is visible on the blockchain. This enhances trust between students, universities, and companies.
+Request Network ensures that every financial transaction đều được thấy trên blockchain.
 
 **2. Automation with Smart Contracts:**  
-By integrating Request Network, PayChunkautomates the creation and processing of payment requests. Once a scholarship is awarded, the payment request triggers the issuance of the NFT and transfers the funds seamlessly to the recipient.
+By integrating the Request Network, PayChunk automates the creation and processing of payment requests seamlessly, especially integrating split invoicing while preserving the nature of the protocol.
 
 **3. Cost-Effectiveness:**  
-Request Network reduces transaction costs compared to traditional payment systems by leveraging blockchain technology, making it a financially efficient solution for managing multiple scholarships.
+Request Network reduces transaction costs compared to traditional payment systems by leveraging blockchain technology, making it an efficient solution for bill payments.
 
-**4. Global Reach:**  
-The decentralized nature of Request Network enables cross-border payments without the need for intermediaries, making PayChunkaccessible to students, universities, and companies worldwide.
-
-**5. Compliance and Security:**  
+**4. Compliance and Security:**  
 Request Network supports compliance with international standards for payments,
 
-**7. Privacy:**
+**5. Privacy:**
 Request Network ensures GDPR-compliant privacy, encrypting request data accessible only to involved parties on the blockchain.
 
 ### 🎯 Product Goal
@@ -60,40 +57,40 @@ Pay Chunk aims to redefine invoice management by integrating dynamic pricing, sp
 
 ## ❗ Problem Statement
 
-### Rigid Payment Structures
-
-Rigid payment structures that do not support flexible changes because invoices are fixed.
-
 ### Limited Flexibility for Shared Payments
 
-Current solutions do not support seamless splitting of invoices among multiple contributors, creating logistical challenges.
+Current solutions do not support seamless invoice splitting across multiple contributors, creating logistical challenges.
 
-### Lack of Real-Time Price Adjustments
+### Rigid payment structure
 
-Invoices are static and fail to reflect real-time price shifts due to market fluctuations or negotiated discounts, causing inefficiencies.
+A rigid payment structure does not support flexible changes because invoices are fixed.
 
-### Inefficiencies in Invoice Management
+### Inefficiency in invoice management
 
-Manual invoice processing is error-prone, time-consuming, and lacks transparency, hindering effective payment tracking and reconciliation.
+With dynamic invoices that can be split, an application is needed that helps manage and track multiple parent and child invoices easily at the same time
+
+### Risks with traditional authorization methods
+
+The traditional payment sharing method is to authorize invoices but focuses on a single person, which is prone to risks leading to discrepancies
 
 ## 💡 PayChunk Solution
 
-PayChunk solves the invoicing pain points and challenges by leveraging blockchain technology along with Request Network’s efficient payment technology, ensuring a seamless and transparent experience for all users. Here’s how PayChunk solves the identified problems:
+PayChunk addresses invoicing pain points and challenges by leveraging blockchain technology along with Request Network’s efficient payment technology, ensuring a seamless and transparent experience for all users. Here’s how PayChunk addresses the identified issues:
 
 **1. Dynamic Invoices**
-Create invoices that automatically adjust prices based on predefined criteria such as market rates, service consumption, or milestones.
+Create flexible invoices with Request Network
 
-**2. Invoice Payment Sharing Protocol**
-Allow payers to split invoices into multiple separate sub-invoices connected to the main invoice, allowing for shared invoice payments between members. Increases granular tracking and streamlined financial allocation.
+**2. Split Invoice Protocol**
+Allow payers to split invoices into multiple separate sub-invoices that are linked to the main invoice, allowing for shared invoice payments between members. Enhanced tracking and streamlined financial allocation.
 
 **3. NFT-backed Invoices**
-Each invoice is represented as an NFT, allowing for traceability and support for sharing protocols, ownership verification, and additional integrations such as collateral or risk assessment.
+Each invoice is represented as an NFT, allowing for traceability and supporting sharing protocols, ownership verification, and additional integrations such as collateral or risk assessment.
 
-**4. Real-time tracking and updates**
-Provide real-time insights into payment progress, status updates, and any changes made to invoices.
-
-**5. Smart Contracts for Automation**
+**4. Smart Contracts for Automation**
 Smart contracts automatically trigger payments, ensuring funds are released upon completion of milestones or pre-defined conditions.
+
+**5. Canvas supports easy management of multiple parent-child invoices at the same time**
+Develop DApps that help users easily manage multi-tier invoices combined with Request Network
 
 ## 🛠️ Architecture Diagram
 
