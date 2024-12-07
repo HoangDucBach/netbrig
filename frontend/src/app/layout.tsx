@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from 'next/font/google'
-import {ToastContainer} from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import { Suspense } from 'react'
 
 import "./globals.css";
 import Providers from "./providers";
@@ -32,13 +33,15 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={plusJakartaSans.className}>
         <Providers>
-          <Flex direction={"column"} padding={"4"} width={"full"} height={"svh"} flex={"1"}>
-            <ToastContainer theme="dark"/>
-            <Navbar />
-            <Flex flex={"1"} position={"relative"}>
-              {children}
+          <Suspense fallback={<div>Loading...</div>}>
+            <Flex direction={"column"} padding={"4"} width={"full"} height={"svh"} flex={"1"}>
+              <ToastContainer theme="dark" />
+              <Navbar />
+              <Flex flex={"1"} position={"relative"}>
+                {children}
+              </Flex>
             </Flex>
-          </Flex>
+          </Suspense>
         </Providers>
       </body>
     </html>
