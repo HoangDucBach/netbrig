@@ -15,10 +15,6 @@ NFT platform allows splitting payment invoices
   - [🎯 Product Goal](#-product-goal)
 - [👥 User Stories](#-user-stories)
 - [❗ Problem Statement](#-problem-statement)
-  - [Limited Flexibility for Shared Payments](#limited-flexibility-for-shared-payments)
-  - [Rigid payment structure](#rigid-payment-structure)
-  - [Inefficiency in invoice management](#inefficiency-in-invoice-management)
-  - [Risks with traditional authorization methods](#risks-with-traditional-authorization-methods)
 - [💡 PayChunk Solution](#-paychunk-solution)
 - [🛠️ Architecture Diagram](#️-architecture-diagram)
 - [📋 Requirement Analysis](#-requirement-analysis)
@@ -57,20 +53,16 @@ Pay Chunk aims to redefine invoice management by integrating dynamic pricing, sp
 
 ## ❗ Problem Statement
 
-### Limited Flexibility for Shared Payments
-
+**1. Limited Flexibility for Shared Payments**
 Current solutions do not support seamless invoice splitting across multiple contributors, creating logistical challenges.
 
-### Rigid payment structure
-
+**2. Rigid payment structure**
 A rigid payment structure does not support flexible changes because invoices are fixed.
 
-### Inefficiency in invoice management
-
+**3. Inefficiency in invoice management**
 With dynamic invoices that can be split, an application is needed that helps manage and track multiple parent and child invoices easily at the same time
 
-### Risks with traditional authorization methods
-
+**4. Risks with traditional authorization methods**
 The traditional payment sharing method is to authorize invoices but focuses on a single person, which is prone to risks leading to discrepancies
 
 ## 💡 PayChunk Solution
