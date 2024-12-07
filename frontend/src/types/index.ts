@@ -62,11 +62,19 @@ export interface Invoice {
 export interface DynamicInvoiceToken {
     name: string;
     symbol: string;
-    requestId: string;
+    requestID: string;
     paymentReference: string;
     payer: string;
     payee: string;
-    amount: string | number;
-    amountPaid: string | number;
-    status: 'pending' | 'partial_paid' | 'paid' | 'cancelled';
+    amount: number;
+    amountPaid: number;
+    status: "PENDING" | "PARTIAL_PAID" | "PAID" | "CANCELLED";
+    children: string[];
+    pay: (_amount: number) => Promise<void>;
+    spawnChild: (
+        _requestId: string,
+        _paymentReference: string,
+        _payer: string,
+        _amount: number
+    ) => Promise<string>;
 }

@@ -1,31 +1,13 @@
 import { useMemo } from 'react';
 import { ethers } from 'ethers';
 
-import DynamicInvoiceTokenFactory from '@/artifacts/DynamicInvoiceTokenFactory.json';
-import DynamicInvoiceToken from '@/artifacts/DynamicInvoiceToken.json';
+import DynamicInvoiceTokenFactoryContract from '@/artifacts/DynamicInvoiceTokenFactory.json';
+import DynamicInvoiceTokenContract from '@/artifacts/DynamicInvoiceToken.json';
 import utils from '@/utils';
 import { useEthers } from './useEthers';
+import { DynamicInvoiceToken } from '@/types';
 
-type DynamicInvoiceToken = {
-    name: string;
-    symbol: string;
-    requestID: string;
-    paymentReference: string;
-    payer: string;
-    payee: string;
-    amount: number;
-    amountPaid: number;
-    status: "PENDING" | "PARTIAL_PAID" | "PAID" | "CANCELLED";
-    children: string[];
-    pay: (_amount: number) => Promise<void>;
-    spawnChild: (
-        _requestId: string,
-        _paymentReference: string,
-        _payer: string,
-        _amount: number
-    ) => Promise<string>;
 
-}
 type DynamicInvoiceTokenHook = {
     createDynamicInvoiceToken: (
         _name: string,
@@ -54,7 +36,7 @@ const useDynamicInvoiceTokenFactory = (): DynamicInvoiceTokenHook => {
         () =>
             new ethers.Contract(
                 utils.core.DYNAMIC_INVOICE_TOKEN_FACTORY_ADDRESS,
-                DynamicInvoiceTokenFactory.abi,
+                DynamicInvoiceTokenFactoryContract.abi,
                 signer
             ),
         [signer]
@@ -91,7 +73,7 @@ const useDynamicInvoiceTokenFactory = (): DynamicInvoiceTokenHook => {
 
             const tokenContract = new ethers.Contract(
                 result,
-                DynamicInvoiceToken.abi,
+                DynamicInvoiceTokenContract.abi,
                 provider
             );
 

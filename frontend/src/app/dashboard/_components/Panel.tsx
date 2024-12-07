@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams, useRouter } from 'next/navigation'
-import { Flex, Heading, Text, Separator, ProgressLabel } from "@chakra-ui/react";
+import { Flex, Heading, Text, Separator, ProgressLabel, Skeleton } from "@chakra-ui/react";
 import React from "react";
 import { CreditCardPosIcon, DollarReceive01Icon, DollarSend01Icon, Search01Icon, SidebarTopIcon } from 'hugeicons-react';
 import { useContracts, useRequestNetwork } from '@/hooks';
@@ -9,11 +9,12 @@ import { DynamicInvoiceToken } from '@/types';
 import { Request, Types } from '@requestnetwork/request-client.js';
 import { useQuery } from "@tanstack/react-query";
 
-import { ProgressBar, ProgressRoot } from "@/components/ui/progress"
+import ProgressBar from "@/components/view/ProgressBar"
 import { Button } from '@/components/ui/button';
 import { Tooltip } from '@/components/ui/tooltip';
 import { truncateAddress } from '@/libs';
 import utils from '@/utils';
+import InvoiceStatusBadge from '@/components/view/InvoiceStatusBadge';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
@@ -25,13 +26,16 @@ export function Panel({ className, ...props }: Props) {
     const { dynamicInvoiceTokenFactory } = useContracts();
     const { getRequest, calulatePaymentReference } = useRequestNetwork();
 
-    // const [invoiceToken, setInvoiceToken] = React.useState<DynamicInvoiceToken | null>(null);
-    // const [invoiceRequest, setInvoiceRequest] = React.useState<Types.IRequestData | null>(null);
-    // const { data: invoiceToken } = useQuery<DynamicInvoiceToken>(["invoiceToken", id], async () => {
-    //     // return await dynamicInvoiceTokenFactory.get(id);
-    // });
+    const { data: invoiceToken, ...invoiceTokenQuery } = useQuery<DynamicInvoiceToken>({
+        queryKey: ["invoiceToken", id],
+        queryFn: async () => {
+            const invoiceToken = await dynamicInvoiceTokenFactory.getDynamicInvoiceToken(id!);
+            return invoiceToken;
+        },
+        enabled: !!id
+    });
 
-    const { data: invoiceRequest } = useQuery<Request>({
+    const { data: invoiceRequest, ...invoiceRequestQuery } = useQuery<Request>({
         queryKey: ["invoiceRequest", id],
         queryFn: async () => {
             const request = await getRequest(id!);
@@ -74,7 +78,15 @@ export function Panel({ className, ...props }: Props) {
     }
 
     const DynamicInvoiceTokenDemo = () => {
-        // if (!invoiceToken) return null;
+        if (!invoiceToken) return (
+            <Text
+                fontSize={"md"}
+                color={"fg.muted"}
+                textAlign={"center"}
+            >
+                Invoice Token have not created
+            </Text>
+        )
 
         const getStatus = (status: number) => {
             switch (status) {
@@ -94,25 +106,30 @@ export function Panel({ className, ...props }: Props) {
                 <Flex direction={"column"} gap={"4"}>
                     <Flex direction={"column"} gap={"4"} width={"full"}>
                         <Heading size={"md"} fontWeight={"semibold"} width={"full"} truncate>
-                            Dynamic Invoice Token
+                            {invoiceToken?.name}
                         </Heading>
                     </Flex>
                     <Flex direction={"column"} gap={"4"} width={"full"} rounded={"2xl"} bg={"bg.emphasized"} p={"4"}>
                         <Flex width={"full"} justifyContent={"space-between"} alignItems={"center"}>
                             <Text fontWeight={"semibold"}>Token</Text>
-                            <Text fontSize={"xs"}>
-                                {getStatus(1)}
-                            </Text>
+                            <InvoiceStatusBadge status={invoiceToken?.status as any} />
                         </Flex>
-                        <Text fontSize={"2xl"} truncate w={"full"} fontWeight={"semibold"} color={"fg"}>
-                            0,0000001 ETH
-                        </Text>
-                        <ProgressRoot size="md" value={40} defaultValue={0} rounded={"full"}>
-                            <ProgressBar rounded={"full"} colorPalette={"primary"} />
-                            <ProgressLabel>
-                                40%
-                            </ProgressLabel>
-                        </ProgressRoot>
+                        <Flex
+                            direction={"column"}
+                            gap={"1"}
+                            width={"full"}
+                        >
+                            <Text fontSize={"2xl"} truncate w={"full"} fontWeight={"semibold"} color={"fg"}>
+                                {invoiceToken?.amount} ETH
+                            </Text>
+                            <Text
+                                fontSize={"md"}
+                                color={"fg.muted"}
+                            >
+                                Paid {invoiceToken?.amountPaid} ETH
+                            </Text>
+                            <ProgressBar value={invoiceToken?.amountPaid / invoiceToken?.amount} />
+                        </Flex>
                     </Flex>
                 </Flex>
             </ItemGroup>
@@ -146,7 +163,21 @@ export function Panel({ className, ...props }: Props) {
             fetchData();
         }, [invoiceRequest]);
 
-        if (!data) return null;
+        if (invoiceRequestQuery.isError) return null;
+
+        if (!data || invoiceRequestQuery.isFetching || invoiceRequestQuery.isLoading) return (
+            <Flex
+                direction={"column"}
+                gap={"4"}
+                width={"full"}
+            >
+                {
+                    Array.from({ length: 4 }).map((_, index) => (
+                        <Skeleton key={index} height={"12"} width="full" rounded={"lg"} />
+                    ))
+                }
+            </Flex>
+        )
 
         const items = [
             {
@@ -173,6 +204,7 @@ export function Panel({ className, ...props }: Props) {
                 url: `${utils.scan.sepoliaScan}/address//${data.payee}`
             },
         ];
+
         return (
             <ItemGroup
                 label={"Invoice"}
@@ -180,6 +212,10 @@ export function Panel({ className, ...props }: Props) {
                 <Flex direction={"column"} gap={"4"} width={"full"}>
                     {
                         items.map((item, index) => {
+                            if (invoiceRequestQuery.isLoading) return (
+                                <Skeleton key={index} height={"12"} width="full" rounded={"lg"} />
+                            )
+
                             return (
                                 <Tooltip key={index} content={item.label}>
                                     <Button
