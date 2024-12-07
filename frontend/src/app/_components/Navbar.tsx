@@ -47,7 +47,17 @@ export function Navbar({ className, ...props }: Props) {
         }
 
         return (
-            <Flex height={"fit-content"} alignItems={"center"} padding={"2"} rounded={"full"} gap={"4"} backgroundColor={"#2A2A2A/50"} backdropBlur={"lg"} borderTopWidth={"1px"} borderTopColor={"ActiveBorder/25"}>
+            <Flex
+                height={"fit-content"}
+                alignItems={"center"}
+                padding={"2"}
+                rounded={"full"}
+                gap={"4"}
+                backgroundColor={"#161616/95"}
+                backdropFilter={"blur(32px)"}
+                borderTopWidth={"1px"}
+                borderTopColor={"ActiveBorder/25"}
+            >
                 {items.map((item, index) => (
                     <NavItem key={index} {...item} />
                 ))}
@@ -61,7 +71,13 @@ export function Navbar({ className, ...props }: Props) {
         )
     }
     return (
-        <Flex width={"full"} justify={"space-between"} alignItems={"center"}>
+        <Flex
+            width={"full"}
+            justify={"space-between"}
+            alignItems={"center"}
+            position={'sticky'}
+            zIndex={"sticky"}
+        >
             <Flex width={"64"} justifyContent={"left"}>
                 <LogoBrand />
             </Flex>

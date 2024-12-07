@@ -3,9 +3,13 @@ import { defineConfig, createSystem, defaultConfig } from "@chakra-ui/react"
 const config = defineConfig({
     theme: {
         tokens: {
+
         },
         semanticTokens: {
             colors: {
+                bg: {
+                    emphasized: { value: "#2A2A2A" },
+                },
                 primary: {
                     DEFAULT: { value: "#D4FF70" },
                     "on-primary": { value: "#11130C" },

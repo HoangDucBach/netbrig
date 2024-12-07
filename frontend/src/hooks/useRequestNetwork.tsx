@@ -80,7 +80,7 @@ export const useRequestNetwork = (): RequestNetworkHook => {
             const request = await requestNetwork?.fromRequestId(requestId);
             return request;
         } catch (error) {
-            console.error('Get Request Error', error);
+            console.error(error);
             throw new Error('Get Request Error');
         }
     };

@@ -1,17 +1,10 @@
-"use client";
-
 import dynamic from "next/dynamic";
 import Providers from "./providers";
 import '@xyflow/react/dist/style.css';
+import { Panel } from "./_components/Panel";
+import { Toolbar } from "./_components/Toolbar";
 
-const Panel = dynamic(() => import("./_components/Panel").then((mod) => mod.Panel), {
-    ssr: false,
-});
 
-const Toolbar = dynamic(() => import("./_components/Toolbar").then((mod) => mod.Toolbar), {
-    ssr: false,
-});
-  
 export default function Layout({
     children,
 }: Readonly<{

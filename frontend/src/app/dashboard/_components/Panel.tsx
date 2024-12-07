@@ -8,6 +8,7 @@ import { useContracts, useRequestNetwork } from '@/hooks';
 import { DynamicInvoiceToken } from '@/types';
 import { Request, Types } from '@requestnetwork/request-client.js';
 import { useQuery } from "@tanstack/react-query";
+import { ethers } from "ethers";
 
 import ProgressBar from "@/components/view/ProgressBar"
 import { Button } from '@/components/ui/button';
@@ -21,19 +22,9 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Panel({ className, ...props }: Props) {
     const searchParams = useSearchParams();
-    const router = useRouter();
     const id = searchParams.get("id");
     const { dynamicInvoiceTokenFactory } = useContracts();
     const { getRequest, calulatePaymentReference } = useRequestNetwork();
-
-    const { data: invoiceToken, ...invoiceTokenQuery } = useQuery<DynamicInvoiceToken>({
-        queryKey: ["invoiceToken", id],
-        queryFn: async () => {
-            const invoiceToken = await dynamicInvoiceTokenFactory.getDynamicInvoiceToken(id!);
-            return invoiceToken;
-        },
-        enabled: !!id
-    });
 
     const { data: invoiceRequest, ...invoiceRequestQuery } = useQuery<Request>({
         queryKey: ["invoiceRequest", id],
@@ -41,7 +32,15 @@ export function Panel({ className, ...props }: Props) {
             const request = await getRequest(id!);
             return request;
         },
-        enabled: !!id
+    });
+
+    const { data: invoiceToken, ...invoiceTokenQuery } = useQuery<DynamicInvoiceToken>({
+        queryKey: ["invoiceToken", id],
+        queryFn: async () => {
+            const paymentReference = await calulatePaymentReference(id!);
+            const invoiceToken = await dynamicInvoiceTokenFactory.getDynamicInvoiceToken(paymentReference);
+            return invoiceToken
+        },
     });
 
     const Header = () => {
@@ -72,12 +71,19 @@ export function Panel({ className, ...props }: Props) {
                     <Text fontSize={"md"} fontWeight={"semibold"}>{label}</Text>
                     {icon}
                 </Flex>
+                <Separator />
                 {children}
             </Flex>
         )
     }
 
     const DynamicInvoiceTokenDemo = () => {
+        if (invoiceTokenQuery.isLoading || invoiceTokenQuery.isFetching) return (
+            <Skeleton height={"32"} width="full" rounded={"lg"} />
+        )
+
+        if (invoiceTokenQuery.isError) return null;
+
         if (!invoiceToken) return (
             <Text
                 fontSize={"md"}
@@ -87,19 +93,6 @@ export function Panel({ className, ...props }: Props) {
                 Invoice Token have not created
             </Text>
         )
-
-        const getStatus = (status: number) => {
-            switch (status) {
-                case 0:
-                    return "Pending";
-                case 1:
-                    return "Partial Paid";
-                case 2:
-                    return "Paid";
-                case 3:
-                    return "Cancelled";
-            }
-        }
 
         return (
             <ItemGroup>
@@ -112,7 +105,7 @@ export function Panel({ className, ...props }: Props) {
                     <Flex direction={"column"} gap={"4"} width={"full"} rounded={"2xl"} bg={"bg.emphasized"} p={"4"}>
                         <Flex width={"full"} justifyContent={"space-between"} alignItems={"center"}>
                             <Text fontWeight={"semibold"}>Token</Text>
-                            <InvoiceStatusBadge status={invoiceToken?.status as any} />
+                            <InvoiceStatusBadge status={invoiceToken?.status} />
                         </Flex>
                         <Flex
                             direction={"column"}
@@ -128,7 +121,7 @@ export function Panel({ className, ...props }: Props) {
                             >
                                 Paid {invoiceToken?.amountPaid} ETH
                             </Text>
-                            <ProgressBar value={invoiceToken?.amountPaid / invoiceToken?.amount} />
+                            <ProgressBar value={invoiceToken?.amountPaid * 100 / invoiceToken?.amount} />
                         </Flex>
                     </Flex>
                 </Flex>
@@ -238,9 +231,14 @@ export function Panel({ className, ...props }: Props) {
             </ItemGroup>
         )
     }
+    React.useEffect(() => {
+        console.log(invoiceToken)
+        console.log(invoiceTokenQuery.error)
+    }, [invoiceToken])
+
     return (
         <Flex
-            backgroundColor={"#2A2A2A/50"}
+            backgroundColor={"#161616/95"}
             backdropFilter={"blur(32px)"}
             direction={"column"}
             rounded={"3xl"}

@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { InputGroup } from "@/components/ui/input-group";
+import { useContracts } from "@/hooks";
 import { Flex, Heading, Text, Input, Separator, Image, Span } from "@chakra-ui/react";
 import { useAppKit, useWalletInfo } from "@reown/appkit/react";
 import { Add01Icon, Copy01Icon, CreditCardPosIcon, Search01Icon, WorkflowCircle06Icon } from "hugeicons-react";
@@ -14,6 +15,7 @@ export function Toolbar({ className, ...props }: Props) {
     const { address } = useAccount();
     const { walletInfo } = useWalletInfo();
     const { open } = useAppKit();
+    const {dynamicInvoiceTokenFactory} = useContracts();
 
     const Search = () => {
         return (
@@ -49,11 +51,14 @@ export function Toolbar({ className, ...props }: Props) {
     }
 
     const CoreOperations = () => {
+        const handleCreateInvoiceToken = async () => {
+            
+        }
         return (
             <Flex direction={"column"} gap={"4"} width={"full"} flex={"1"}>
                 <Button width={"full"} rounded={"lg"} justifyContent={"start"}>
                     <Span><Add01Icon /></Span>
-                    Create Invoice
+                    Create Invoice Token
                 </Button>
                 <Button width={"full"} rounded={"lg"} justifyContent={"start"}>
                     <Span><CreditCardPosIcon /></Span>
@@ -97,7 +102,7 @@ export function Toolbar({ className, ...props }: Props) {
 
     return (
         <Flex
-            backgroundColor={"#2A2A2A/50"}
+            backgroundColor={"#161616/95"}
             backdropFilter={"blur(32px)"}
             direction={"column"}
             rounded={"3xl"}

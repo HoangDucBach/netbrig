@@ -1,12 +1,27 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { DynamicInvoiceToken } from "@/types";
 import { Center, Flex, Heading, Text } from "@chakra-ui/react";
 import { Coins01Icon, InvoiceIcon } from "hugeicons-react";
 import React from "react";
 import { Handle, Position } from '@xyflow/react';
+import { SplitFormWrapper } from "../form/SplitForm";
+import { useContracts } from "@/hooks";
+import { toast } from "react-toastify";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
-    invoiceToken?: DynamicInvoiceToken;
+    invoiceToken?: {
+        requestId: DynamicInvoiceToken["requestId"];
+        paymentReference: DynamicInvoiceToken["paymentReference"];
+        name: DynamicInvoiceToken["name"];
+        symbol: DynamicInvoiceToken["symbol"];
+        amount: DynamicInvoiceToken["amount"];
+        amountPaid: DynamicInvoiceToken["amountPaid"];
+        status: DynamicInvoiceToken["status"];
+        payee: DynamicInvoiceToken["payee"];
+        payer: DynamicInvoiceToken["payer"];
+    }
 }
 
 // Function to generate a color based on a string (id) with alpha
@@ -48,29 +63,32 @@ const generateColorFromId = (id: string, light: number = 1) => {
 };
 
 export const DynamicInvoiceTokenCard = ({ invoiceToken, ...rest }: Props) => {
-    const backgroundColor = generateColorFromId("010044e42819e3c863258952b4ea26c86aef23b280359db32c1700b7550096045f", 0.25);
-    const color = generateColorFromId("010044e42819e3c863258952b4ea26c86aef23b280359db32c1700b7550096045f", 1);
+    const { dynamicInvoiceTokenFactory } = useContracts();
 
+    const backgroundColor = generateColorFromId(invoiceToken?.requestId!, 0.25);
+    const color = generateColorFromId(invoiceToken?.requestId!, 1);
     const handlePay = async () => {
-        console.log("Pay");
+        if (!invoiceToken) return;
+        try {
+            const { paymentReference } = invoiceToken;
+            const invoice = await dynamicInvoiceTokenFactory.getDynamicInvoiceToken(paymentReference);
+            await invoice.pay();
+        } catch (error) {
+            toast.error("Failed to pay invoice");
+        }
     };
-
-    const handleSplit = async () => {
-        console.log("Split");
-    }
 
     const CoreOperations = () => {
         return (
             <Flex direction={"row"} gap={"4"} w={"full"} h={"fit-content"}>
-                <Button size={"sm"} rounded={"lg"} flex={"1"} bg={"gray.100"} color={"gray.900"}>
+                <Button size={"sm"} rounded={"lg"} flex={"1"} bg={"gray.100"} color={"gray.900"} onClick={handlePay}>
                     Pay
                 </Button>
-                <Button size={"sm"} rounded={"lg"} flex={"1"} bg={color} color={"fg"}>
-                    Split
-                </Button>
+                <SplitFormWrapper color={color} />
             </Flex>
         )
     };
+
     return (
         <Flex
             {...rest}
@@ -84,14 +102,14 @@ export const DynamicInvoiceTokenCard = ({ invoiceToken, ...rest }: Props) => {
             h={"fit-content"}
             cursor={"pointer"}
         >
-            <Handle position={Position.Bottom} type="target" />
-            <Handle position={Position.Top} type="source" />
+            <Handle position={Position.Bottom} type="source" />
+            <Handle position={Position.Top} type="target" />
             <Flex direction={"row"} gap={"4"} w={"fit"}>
                 <Center w={"12"} h={"12"} rounded={"lg"} bg={color}>
                     <InvoiceIcon />
                 </Center>
                 <Flex direction={"column"}>
-                    <Heading size={"md"} as={"h6"}>{invoiceToken?.name || "Token Name"}</Heading>
+                    <Heading size={"md"} as={"h6"}>{invoiceToken?.name || "-"}</Heading>
                     <Flex direction={"row"} gap={"1"} color={"fg.muted"}>
                         <Coins01Icon size={16} />
                         <Text fontSize={"xs"} >{invoiceToken?.amount || "0.00"} {"ETH"}</Text>

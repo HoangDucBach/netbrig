@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from 'next/font/google'
+import {ToastContainer} from "react-toastify";
 
 import "./globals.css";
 import Providers from "./providers";
 import utils from "@/utils";
 import { Box, Flex } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Navbar = dynamic(() => import("./_components/Navbar").then((mod) => mod.Navbar), {
   ssr: false,
@@ -31,6 +33,7 @@ export default function RootLayout({
       <body className={plusJakartaSans.className}>
         <Providers>
           <Flex direction={"column"} padding={"4"} width={"full"} height={"svh"} flex={"1"}>
+            <ToastContainer theme="dark"/>
             <Navbar />
             <Flex flex={"1"} position={"relative"}>
               {children}
