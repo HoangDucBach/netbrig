@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from 'next/navigation'
-import { Flex, Heading, Text, Separator, Skeleton } from "@chakra-ui/react";
+import { Flex, Heading, Text, Separator, Skeleton, Center } from "@chakra-ui/react";
 import React from "react";
 import { CreditCardPosIcon, DollarReceive01Icon, DollarSend01Icon, InformationCircleIcon, Search01Icon, SidebarTopIcon } from 'hugeicons-react';
 import { useContracts, useRequestNetwork } from '@/hooks';
@@ -41,7 +41,21 @@ export function Panel({ className, ...props }: Props) {
             return invoiceToken
         },
     });
-
+    
+    const Placeholder = () => {
+        return (
+            <Flex w={"full"} flex={"1"} direction={"column"} gap={"4"} justifyContent={"center"} alignItems={"center"}>
+                <Search01Icon />
+                <Text
+                    fontSize={"md"}
+                    color={"fg.muted"}
+                    textAlign={"center"}
+                >
+                    Search any invoice to view
+                </Text>
+            </Flex>
+        )
+    }
     const Header = () => {
         return (
             <Flex width={"full"} direction={"column"} gap={"4"}>
@@ -77,7 +91,7 @@ export function Panel({ className, ...props }: Props) {
     }
 
     const DynamicInvoiceTokenDemo = () => {
-        if (invoiceTokenQuery.isLoading || invoiceTokenQuery.isFetching) return (
+        if (invoiceTokenQuery.isLoading) return (
             <Skeleton height={"32"} width="full" rounded={"lg"} />
         )
 
@@ -256,8 +270,15 @@ export function Panel({ className, ...props }: Props) {
             {...props}
         >
             <Header />
-            <DynamicInvoiceTokenDemo />
-            <InvoiceDetails />
+            {id ? (
+                <>
+                    <DynamicInvoiceTokenDemo />
+                    <InvoiceDetails />
+                </>
+            )
+                :
+                <Placeholder />
+            }
         </Flex>
     )
 }

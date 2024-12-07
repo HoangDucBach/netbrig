@@ -1,8 +1,8 @@
 import { Logo } from "@/components/Icons";
 import utils from "@/utils";
-import { Center, Flex, Heading, Text } from "@chakra-ui/react";
+import { Center, Flex, Heading, Link, Text } from "@chakra-ui/react";
 import React from "react";
-import { DashboardSquare02Icon, InvoiceIcon } from "hugeicons-react"
+import { BrowserIcon, DashboardSquare02Icon, InvoiceIcon } from "hugeicons-react"
 import { WalletOption } from "./WalletOptions";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
@@ -26,10 +26,10 @@ export function Navbar({ className, ...props }: Props) {
     }
     const Navbar = () => {
         const items = [
-            { label: "Home", href: "/dashboard", icon: < DashboardSquare02Icon /> },
-            { label: "Invoices", href: "/invoices", icon: < InvoiceIcon /> },
+            { label: "Home", href: "/", icon: <BrowserIcon /> },
+            { label: "Dashboard", href: "/dashboard", icon: < DashboardSquare02Icon /> },
         ]
-        const NavItem = ({ label, icon }: { label: string, href: string, icon: React.ReactNode }) => {
+        const NavItem = ({ label, icon, href }: { label: string, href: string, icon: React.ReactNode }) => {
             return (
                 <Flex
                     alignItems={"center"}
@@ -39,9 +39,9 @@ export function Navbar({ className, ...props }: Props) {
                     <Center width={"12"} height={"12"} borderRadius={"full"} bg={"bg.emphasized"} color={"white"}>
                         {icon}
                     </Center>
-                    <Text fontSize={"sm"} fontWeight={"medium"}>
+                    <Link href={href} fontSize={"sm"} fontWeight={"medium"}>
                         {label}
-                    </Text>
+                    </Link>
                 </Flex >
             )
         }

@@ -9,6 +9,7 @@ import utils from "@/utils";
 import { Flex } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import 'react-toastify/dist/ReactToastify.css';
+import { LoadingScreen } from "@/components/view/LoadingScreen";
 
 const Navbar = dynamic(() => import("./_components/Navbar").then((mod) => mod.Navbar), {
   ssr: false,
@@ -33,7 +34,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={plusJakartaSans.className}>
         <Providers>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<LoadingScreen />}>
             <Flex direction={"column"} padding={"4"} width={"full"} height={"svh"} flex={"1"}>
               <ToastContainer theme="dark" />
               <Navbar />

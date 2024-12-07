@@ -1,15 +1,17 @@
 "use client";
 
-import { CreateInvoiceTokenFormWrapper } from "@/components/form/CreateInvoiceTokenForm";
-import { Button } from "@/components/ui/button";
-import { InputGroup } from "@/components/ui/input-group";
-import { DynamicInvoiceTokenViewCard } from "@/components/view/DynamicInvoiceTokenCard";
-import { mockDynamicInvoiceTokens } from "@/mock";
 import { Flex, Heading, Text, Input, Separator, Image, Span } from "@chakra-ui/react";
 import { useAppKit, useWalletInfo } from "@reown/appkit/react";
 import { Copy01Icon, CreditCardPosIcon, Search01Icon, WorkflowCircle06Icon } from "hugeicons-react";
 import React from "react";
 import { useAccount } from "wagmi";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+import { CreateInvoiceTokenFormWrapper } from "@/components/form/CreateInvoiceTokenForm";
+import { Button } from "@/components/ui/button";
+import { InputGroup } from "@/components/ui/input-group";
+import { DynamicInvoiceTokenViewCard } from "@/components/view/DynamicInvoiceTokenCard";
+import { mockDynamicInvoiceTokens } from "@/mock";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
@@ -38,6 +40,25 @@ export function Toolbar({ className, ...props }: Props) {
     }
 
     const Search = () => {
+        const pathname = usePathname();
+        const searchParams = useSearchParams();
+        const router = useRouter();
+
+        const createQueryString = React.useCallback(
+            (name: string, value: string) => {
+                const params = new URLSearchParams(searchParams.toString())
+                params.set(name, value)
+
+                return params.toString()
+            },
+            [searchParams]
+        )
+        const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const value = e.target.value;
+            const queryString = createQueryString("id", value);
+            router.push(`${pathname}?${queryString}`)
+        }
+
         return (
             <InputGroup
                 rounded={"lg"}
@@ -46,8 +67,9 @@ export function Toolbar({ className, ...props }: Props) {
                 startElement={<Search01Icon />}
             >
                 <Input
-                    placeholder={"Search"}
+                    placeholder={"Search id"}
                     rounded={"lg"}
+                    onChange={handleSearch}
                 />
             </InputGroup>
         )

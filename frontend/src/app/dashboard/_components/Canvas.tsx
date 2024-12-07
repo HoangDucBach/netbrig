@@ -27,21 +27,23 @@ const nodeTypes = {
         );
     }),
 }
-nodeTypes.dynamicInvoiceToken.displayName = 'DynamicInvoiceTokenNode';
+
+nodeTypes.dynamicInvoiceToken.displayName = 'DynamicInvoiceToken';
 
 export function Canvas({ className, ...props }: Props) {
     const searchParams = useSearchParams();
     const id = searchParams.get("id");
     const { dynamicInvoiceTokenFactory, dynamicInvoiceToken } = useContracts();
     const { calulatePaymentReference } = useRequestNetwork();
-    // const { data: invoiceToken } = useQuery<DynamicInvoiceToken>({
-    //     queryKey: ["invoiceToken", id],
-    //     queryFn: async () => {
-    //         const paymentReference = await calulatePaymentReference(id!);
-    //         const invoiceToken = await dynamicInvoiceTokenFactory.getDynamicInvoiceToken(paymentReference);
-    //         return invoiceToken
-    //     },
-    // });
+    const { data: invoiceToken, ...invoiceTokenQuery } = useQuery<DynamicInvoiceToken>({
+        queryKey: ["invoiceToken", id],
+        queryFn: async () => {
+            const paymentReference = await calulatePaymentReference(id!);
+            const invoiceToken = await dynamicInvoiceTokenFactory.getDynamicInvoiceToken(paymentReference);
+            return invoiceToken
+        },
+        enabled: false,
+    });
 
 
     const [nodes, setNodes, onNodesChange] = useNodesState([] as any);
@@ -52,7 +54,10 @@ export function Canvas({ className, ...props }: Props) {
         [setEdges],
     );
 
-    const generateAllNodesWithChilds = useCallback(async (invoiceToken: DynamicInvoiceToken, x: number, y: number) => {
+    const generateAllNodesWithChilds = async (invoiceToken: DynamicInvoiceToken, x: number = 0, y: number = 0) => {
+        x = x || Math.floor(Math.random() * 1000);
+        y = y || Math.floor(Math.random() * 1000);
+
         setNodes((nodes) => {
             const newNodes = [...nodes];
             newNodes.push({
@@ -65,13 +70,13 @@ export function Canvas({ className, ...props }: Props) {
         });
 
         if (invoiceToken.children) {
-            for (const childAddress of invoiceToken.children) {
+            invoiceToken.children.forEach(async childAddress => {
                 const childInvoiceToken = await dynamicInvoiceToken.getDynamicInvoiceToken(childAddress);
 
                 const xChild = x + Math.floor(Math.random() * 10) + 256;
                 const yChild = y + Math.floor(Math.random() * 10) + 256;
 
-                await generateAllNodesWithChilds(childInvoiceToken, xChild, yChild);
+                generateAllNodesWithChilds(childInvoiceToken, xChild, yChild);
 
                 setNodes((nodes) => {
                     const newNodes = [...nodes];
@@ -88,26 +93,21 @@ export function Canvas({ className, ...props }: Props) {
                     const newEdges = [...edges];
                     newEdges.push({
                         id: `${invoiceToken.paymentReference}-${childInvoiceToken.paymentReference}`,
-                        source: invoiceToken.paymentReference,
-                        target: childInvoiceToken.paymentReference,
+                        source: childInvoiceToken.paymentReference,
+                        target: invoiceToken.paymentReference,
                     });
                     return newEdges;
                 });
-            }
-        }
-    }, [dynamicInvoiceToken, setNodes, setEdges]);
 
+            });
+        }
+    }
+    // recursion to create the nodes
     React.useEffect(() => {
-        if (id) {
-            const fetchData = async () => {
-                const paymentReference = await calulatePaymentReference(id);
-                const invoiceToken = await dynamicInvoiceTokenFactory.getDynamicInvoiceToken(paymentReference);
-                await generateAllNodesWithChilds(invoiceToken, 0, 0);
-            };
-
-            fetchData();
+        if (invoiceToken) {
+            generateAllNodesWithChilds(invoiceToken);
         }
-    }, [id, calulatePaymentReference, dynamicInvoiceTokenFactory, generateAllNodesWithChilds]);
+    }, [invoiceToken]);
 
     return (
         <Box
